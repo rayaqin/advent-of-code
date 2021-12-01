@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  min-height: 460px;
+  width: 100vw;
+  overflow: hidden;
+}
+
+#background {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(18, 29, 18);
+}
+
+#input-wrapper {
+  cursor: pointer;
+  background-color: rgb(53, 92, 53);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 32px;
+  transition: all 0.2s ease-in-out;
+}
+
+#input-wrapper:hover {
+  transform: scale(1.02);
+  background-color: rgb(63, 148, 63);
+}
+
+#canvas {
+  overflow: auto;
+  display: none;
+  padding: 24px;
+  color: rgb(60, 220, 60);
+  background-color: black;
+  width: 85%;
+  min-height: 250px;
+  max-height: 600px;
+  border-radius: 24px;
+}
+
+input[type='file'] {
+  position: absolute;
+  left: -9999px;
+}
