@@ -8,7 +8,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 
 const chooseFile = document.getElementById('choose-file');
 const inputWrapper = document.getElementById('input-wrapper');
-const canvas = document.getElementById('canvas');
+const canvasWrapper = document.getElementById('canvas-wrapper');
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -19,7 +19,7 @@ const handleFileSelect = (event) => {
 const swapToCanvas = () => {
   inputWrapper.style.display = 'none';
   chooseFile.style.display = 'none';
-  canvas.style.display = 'block';
+  canvasWrapper.style.display = 'block';
 };
 
 chooseFile.addEventListener('change', handleFileSelect, false);
@@ -52,7 +52,7 @@ const solution = (source) => {
   depthChanges.forEach((dc) => {
     dc.change === 'increased' && numberOfDepthIncreases++;
   });
-  canvas.innerHTML =
+  canvasWrapper.innerHTML =
     '<b>Depth changes</b>' +
     '<br />' +
     depthChanges.map((dc) => {

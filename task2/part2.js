@@ -27,5 +27,45 @@ chooseFile.addEventListener('change', handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  canvas.innerHTML = source;
+
+  let horizontalPosition = 0;
+  let depth = 0;
+  let aim = 0;
+
+  const instructions = source.split('\n').map((line) => {
+    let splitLine = line.split(' ');
+    let command = splitLine[0];
+    let value = parseInt(splitLine[1]);
+
+    if (command === 'forward') {
+      horizontalPosition += value;
+      depth += aim * value;
+    } else if (command === 'up') {
+      aim = aim - value;
+    } else {
+      aim = aim + value;
+    }
+
+    return {
+      command: command,
+      value: value,
+    };
+  });
+
+  canvas.innerHTML =
+    '<b>Commands with corresponding values: </b>' +
+    '<br />' +
+    instructions.map((i) => {
+      return '<br />' + i.command + '  ' + i.value;
+    }) +
+    '<br />' +
+    '<br />' +
+    'horizontal position: ' +
+    horizontalPosition +
+    '<br />' +
+    'depth: ' +
+    depth +
+    '<br />' +
+    'horizontal position * depth: ' +
+    horizontalPosition * depth;
 };

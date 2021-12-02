@@ -8,6 +8,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 
 const chooseFile = document.getElementById('choose-file');
 const inputWrapper = document.getElementById('input-wrapper');
+const canvasWrapper = document.getElementById('canvas-wrapper');
 const canvas = document.getElementById('canvas');
 
 const handleFileSelect = (event) => {
@@ -19,7 +20,7 @@ const handleFileSelect = (event) => {
 const swapToCanvas = () => {
   inputWrapper.style.display = 'none';
   chooseFile.style.display = 'none';
-  canvas.style.display = 'block';
+  canvasWrapper.style.display = 'block';
 };
 
 chooseFile.addEventListener('change', handleFileSelect, false);

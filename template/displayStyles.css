@@ -32,19 +32,50 @@ body {
   background-color: rgb(63, 148, 63);
 }
 
+#canvas-wrapper {
+  display: none;
+  width: 85%;
+  padding: 24px;
+  border-radius: 24px;
+  background-color: black;
+}
+
 #canvas {
   overflow: auto;
-  display: none;
-  padding: 24px;
+  padding: 4px;
   color: rgb(60, 220, 60);
-  background-color: black;
-  width: 85%;
   min-height: 250px;
   max-height: 600px;
-  border-radius: 24px;
 }
 
 input[type='file'] {
   position: absolute;
   left: -9999px;
+}
+input[type='file'] {
+  position: absolute;
+  left: -9999px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(31, 143, 20);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(84, 175, 44);
 }
