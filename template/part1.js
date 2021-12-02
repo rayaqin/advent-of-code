@@ -27,5 +27,5 @@ chooseFile.addEventListener('change', handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  canvas.innerHTML = source;
+  canvas.innerHTML = source.split('\n');
 };

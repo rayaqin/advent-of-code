@@ -41,6 +41,7 @@ const solution = (source) => {
       change = 'no change';
     } else if (windowSums[i] < windowSums[i + 1]) {
       change = 'increased';
+      numberOfDepthIncreases++;
     } else {
       change = 'decreased';
     }
@@ -51,9 +52,6 @@ const solution = (source) => {
     });
   }
 
-  depthChanges.forEach((dc) => {
-    dc.change === 'increased' && numberOfDepthIncreases++;
-  });
   canvas.innerHTML =
     '<b>Depth changes of three measurement windows</b>' +
     '<br />' +

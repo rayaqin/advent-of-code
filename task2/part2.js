@@ -35,28 +35,28 @@ const solution = (source) => {
   const instructions = source.split('\n').map((line) => {
     let splitLine = line.split(' ');
     let command = splitLine[0];
-    let value = parseInt(splitLine[1]);
+    let distance = parseInt(splitLine[1]);
 
     if (command === 'forward') {
-      horizontalPosition += value;
-      depth += aim * value;
+      horizontalPosition += distance;
+      depth += aim * distance;
     } else if (command === 'up') {
-      aim = aim - value;
+      aim -= distance;
     } else {
-      aim = aim + value;
+      aim += distance;
     }
 
     return {
       command: command,
-      value: value,
+      distance: distance,
     };
   });
 
   canvas.innerHTML =
-    '<b>Commands with corresponding values: </b>' +
+    '<b>Commands with corresponding distance values: </b>' +
     '<br />' +
     instructions.map((i) => {
-      return '<br />' + i.command + '  ' + i.value;
+      return '<br />' + i.command + '  ' + i.distance;
     }) +
     '<br />' +
     '<br />' +
