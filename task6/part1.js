@@ -1,9 +1,7 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log('File APIs are supported in your browser, you may proceed.');
 } else {
-  alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
-  );
+  alert("The File APIs are not fully supported in this browser. The code won't work.");
 }
 
 const chooseFile = document.getElementById('choose-file');
@@ -30,7 +28,7 @@ const solution = (source) => {
   let lanternfish = source.split(',').map((f) => parseInt(f));
   console.log(lanternfish);
   for (let i = 0; i < 18; i++) {
-    console.log(simulateBreedingCycle(lanternfish));
+    canvas.innerHTML += '<br />' + 'cycle ' + i + ': ' + simulateBreedingCycle(lanternfish);
   }
 };
 

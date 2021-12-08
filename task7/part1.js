@@ -29,10 +29,6 @@ const solution = (source) => {
     .split(',')
     .map((a) => parseInt(a))
     .sort((a, b) => a - b);
-  let positionsMap = new Map();
-  positions.forEach((p) => {
-    positionsMap.set(p, (positionsMap.get(p) ?? 0) + 1);
-  });
 
   canvas.innerHTML += '<br />' + 'positions: ' + positions.join(' ');
 

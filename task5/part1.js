@@ -1,9 +1,7 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log('File APIs are supported in your browser, you may proceed.');
 } else {
-  alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
-  );
+  alert("The File APIs are not fully supported in this browser. The code won't work.");
 }
 
 const chooseFile = document.getElementById('choose-file');
@@ -44,6 +42,8 @@ const solution = (source) => {
       largestY = y1 > y2 ? y1 : y2;
     }
 
+    canvas.innerHTML += '<br />' + 'x1: ' + x1 + 'y1: ' + y1 + 'x2: ' + x2 + 'y2: ' + y2;
+
     return {
       x1: x1,
       y1: y1,
@@ -58,16 +58,8 @@ const solution = (source) => {
 
   cloudData.forEach((vector) => {
     if (vector.x1 === vector.x2 || vector.y1 === vector.y2) {
-      for (
-        let x = Math.min(vector.x1, vector.x2);
-        x <= Math.max(vector.x1, vector.x2);
-        x++
-      ) {
-        for (
-          let y = Math.min(vector.y1, vector.y2);
-          y <= Math.max(vector.y1, vector.y2);
-          y++
-        ) {
+      for (let x = Math.min(vector.x1, vector.x2); x <= Math.max(vector.x1, vector.x2); x++) {
+        for (let y = Math.min(vector.y1, vector.y2); y <= Math.max(vector.y1, vector.y2); y++) {
           if (diagram[x][y] === '.') {
             diagram[x][y] = 1;
           } else {
@@ -77,7 +69,7 @@ const solution = (source) => {
       }
     }
   });
-  let dangerCount = 0; //todo
+  let dangerCount = 0;
   diagram.forEach((line) => {
     line.forEach((pos) => {
       if (pos >= 2) {
@@ -85,5 +77,6 @@ const solution = (source) => {
       }
     });
   });
-  console.log(cloudData, diagram, dangerCount);
+
+  canvas.innerHTML += '<br />' + 'dangerous points: ' + dangerCount;
 };
