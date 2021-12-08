@@ -1,9 +1,7 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log('File APIs are supported in your browser, you may proceed.');
 } else {
-  alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
-  );
+  alert("The File APIs are not fully supported in this browser. The code won't work.");
 }
 
 const chooseFile = document.getElementById('choose-file');
@@ -36,7 +34,7 @@ const solution = (source) => {
     positionsMap.set(p, (positionsMap.get(p) ?? 0) + 1);
   });
 
-  console.log(positions);
+  canvas.innerHTML += '<br />' + 'positions: ' + positions.join(' ');
 
   let bestMeetingHeight = { num: 0, fuelUsed: null };
   for (let i = Math.min(...positions); i < Math.max(...positions); i++) {
@@ -44,13 +42,12 @@ const solution = (source) => {
     positions.forEach((p) => {
       fuelUsed += Math.abs(p - i);
     });
-    if (
-      bestMeetingHeight.fuelUsed === null ||
-      fuelUsed < bestMeetingHeight.fuelUsed
-    ) {
+    if (bestMeetingHeight.fuelUsed === null || fuelUsed < bestMeetingHeight.fuelUsed) {
       bestMeetingHeight.num = i;
       bestMeetingHeight.fuelUsed = fuelUsed;
     }
   }
-  console.log(bestMeetingHeight);
+
+  canvas.innerHTML += '<br />' + 'meeting point: ' + bestMeetingHeight.num;
+  canvas.innerHTML += '<br />' + 'fuel needed: ' + bestMeetingHeight.fuelUsed;
 };
