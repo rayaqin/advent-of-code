@@ -1,0 +1,29 @@
+acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab |
+cdfeb fcadb cdfeb cdbaf
+
+ab -> 1
+eafb -> 4
+acedgbf -> 8
+dab -> 7
+
+ a, d and g are, not nec. in that order the three letters that
+ appear in all three five digit patterns (commonAmongFives)
+
+ the letter in commonAmongFives and also in FOUR is d
+ the letter in commonAmongFives and also in SEVEN is a
+ that means original g is c
+
+ the letter in FOUR that is not among a,d,g and is not in ONE is b
+ the letter that is not in FOUR and is not among a,d,g, but is present in EIGHT is e
+ the letter that is present in ONE and is not present in exactly one of the six digit patterns is c
+ so by elimination original f is b
+
+
+ meaning:
+  dddd
+e     a
+e     a
+  ffff 
+g     b
+g     b
+  cccc
