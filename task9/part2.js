@@ -72,16 +72,16 @@ const findAndFillBasinNumbers = (x, y, heightMatrix, basinNumbers) => {
   }
   basinNumbers.push([x, y]);
 
-  if (x + 1 < heightMatrix.length && heightMatrix[x + 1][y] > heightMatrix[x][y]) {
+  if (x + 1 < heightMatrix.length && heightMatrix[x + 1][y] >= heightMatrix[x][y]) {
     findAndFillBasinNumbers(x + 1, y, heightMatrix, basinNumbers);
   }
-  if (x - 1 >= 0 && heightMatrix[x - 1][y] > heightMatrix[x][y]) {
+  if (x - 1 >= 0 && heightMatrix[x - 1][y] >= heightMatrix[x][y]) {
     findAndFillBasinNumbers(x - 1, y, heightMatrix, basinNumbers);
   }
-  if (y + 1 < heightMatrix[0].length && heightMatrix[x][y + 1] > heightMatrix[x][y]) {
+  if (y + 1 < heightMatrix[0].length && heightMatrix[x][y + 1] >= heightMatrix[x][y]) {
     findAndFillBasinNumbers(x, y + 1, heightMatrix, basinNumbers);
   }
-  if (y - 1 >= 0 && heightMatrix[x][y - 1] > heightMatrix[x][y]) {
+  if (y - 1 >= 0 && heightMatrix[x][y - 1] >= heightMatrix[x][y]) {
     findAndFillBasinNumbers(x, y - 1, heightMatrix, basinNumbers);
   }
   return;
