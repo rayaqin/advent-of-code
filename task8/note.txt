@@ -13,8 +13,8 @@ dab -> 7
  the letter in commonAmongFives and also in SEVEN is a
  that means original g is c
 
- the letter in FOUR that is not among a,d,g and is not in ONE is b
- the letter that is not in FOUR and is not among a,d,g, but is present in EIGHT is e
+ the letter in FOUR that is not among commonAmongFives and is not in ONE is b
+ the letter that is not in FOUR and is not among commonAmongFives, but is present in EIGHT is e
  the letter that is present in ONE and is not present in exactly one of the six digit patterns is c
  so by elimination original f is b
 
