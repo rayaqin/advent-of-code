@@ -25,13 +25,6 @@ chooseFile.addEventListener('change', handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let correctLineLength = 0;
-  let closeToOpenTagMap = {
-    ')': '(',
-    ']': '[',
-    '}': '{',
-    '>': '<',
-  };
   let openToCloseTagMap = {
     '(': ')',
     '[': ']',

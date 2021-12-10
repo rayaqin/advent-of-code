@@ -59,10 +59,9 @@ const solution = (source) => {
       } else if (lineArray[i] === openToCloseTagMap[openingsStack[openingsStack.length - 1]]) {
         openingsStack.pop();
       } else {
-        break;
+        break; // corrupted line
       }
       if (i === lineArray.length - 1 && openingsStack.length) {
-        debugger;
         arrayOfTagsNeededForCompletion.push(openingsStack.reverse().map((c) => openToCloseTagMap[c]));
         break;
       }
