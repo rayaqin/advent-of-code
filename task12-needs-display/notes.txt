@@ -1,0 +1,3 @@
+cant go to a cave if:
+- you're going from a small cave, and the next cave has only one connection
+- you're going from a small cave, and the next cave has only small caves as connections and you've visited all of those already
