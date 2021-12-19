@@ -39,12 +39,7 @@ const solution = (source) => {
       let OGposY = y % nodesMatrix[0].length;
       let OGvalue = nodesMatrix[OGposX][OGposY];
       let currentValue = OGvalue;
-      for (let i = 0; i < dimensionX; i++) {
-        currentValue = mutateNodeValue(currentValue);
-      }
-      for (let i = 0; i < dimensionY; i++) {
-        currentValue = mutateNodeValue(currentValue);
-      }
+      currentValue = mutateNodeValue(currentValue, dimensionX + dimensionY);
       extendedMatrixOfNodes[x][y] = { value: currentValue, visited: false, distance: Infinity, neighbours: [] };
     }
   }
@@ -82,7 +77,6 @@ const solution = (source) => {
     nodeMap[currentNodeKey].visited = true;
     unvisitedNodeKeys.delete(currentNodeKey);
     currentNodeKey = returnSmallestDistanceNodeKey(unvisitedNodeKeys, nodeMap);
-    console.log(currentNodeKey);
   }
 
   console.log(nodeMap[destinationNodeKey]);
@@ -98,11 +92,16 @@ const returnSmallestDistanceNodeKey = (univisitedKeys, nodeMap) => {
   return smallestNodeKey;
 };
 
-const mutateNodeValue = (value) => {
-  return value === 9 ? 1 : value + 1;
+const mutateNodeValue = (value, repeat) => {
+  let result = value;
+  for (let i = 0; i < repeat; i++) {
+    result = result === 9 ? 1 : result + 1;
+  }
+  return result;
 };
 
 /* 
+Basic Dijkstra
 Mark all nodes unvisited. Create a set of all the unvisited nodes called the unvisited set. - done
 
 Assign to every node a tentative distance value: set it to zero for our initial node and to infinity for all other nodes. The tentative distance of a node v is the length of the shortest path discovered so far between the node v and the starting node. Since initially no path is known to any other vertex than the source itself (which is a path of length zero), all other tentative distances are initially set to infinity. Set the initial node as current. - done
