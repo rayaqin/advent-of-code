@@ -55,13 +55,19 @@ const solution = (source) => {
     for (const [idx, match] of foundScanners) {
       for (const beacon of scannerData[idx]) {
         const t = match.translations;
-        const a = [
+        const newBeacon = [
           t[0].v + beacon[t[0].c] * t[0].op, //x
           t[1].v + beacon[t[1].c] * t[1].op, //y
           t[2].v + beacon[t[2].c] * t[2].op, //z
         ];
         //avoid duplicate which confuse thumbprint calculation
-        if (!scannerData[0].some((b) => b[0] == a[0] && b[1] == a[1] && b[2] == a[2])) scannerData[0].push(a);
+        if (
+          !scannerData[0].some(
+            (existingBeacon) =>
+              existingBeacon[0] == newBeacon[0] && existingBeacon[1] == newBeacon[1] && existingBeacon[2] == newBeacon[2]
+          )
+        )
+          scannerData[0].push(newBeacon);
       }
     }
 
@@ -69,8 +75,6 @@ const solution = (source) => {
     //redo thumbprint for new joined beacon
     beacons = createBeaconDataObjects(scannerData);
   }
-
-  console.log(foundScanners);
 
   const scanners = [[0, 0, 0]];
   for (const [idx, match] of foundScanners) {
@@ -114,33 +118,30 @@ const createBeaconDataObjects = (scanners) => {
 };
 
 //find xyz
-function findTranslation(a, b) {
+function findTranslation(triangle1, triangle2) {
   let arr = [[], [], [], [], [], [], [], [], []];
-  function push(ar, c, op, v) {
-    ar.push({ c, v, op });
-  }
   for (let i = 0; i < 3; i++) {
     //x translation
-    push(arr[0], 0, -1, a[i][0] + b[i][0]);
-    push(arr[0], 0, +1, a[i][0] - b[i][0]);
-    push(arr[1], 1, -1, a[i][0] + b[i][1]);
-    push(arr[1], 1, +1, a[i][0] - b[i][1]);
-    push(arr[2], 2, -1, a[i][0] + b[i][2]);
-    push(arr[2], 2, +1, a[i][0] - b[i][2]);
+    arr[0].push({ c: 0, op: -1, v: triangle1[i][0] + triangle2[i][0] });
+    arr[0].push({ c: 0, op: +1, v: triangle1[i][0] - triangle2[i][0] });
+    arr[1].push({ c: 1, op: -1, v: triangle1[i][0] + triangle2[i][1] });
+    arr[1].push({ c: 1, op: +1, v: triangle1[i][0] - triangle2[i][1] });
+    arr[2].push({ c: 2, op: -1, v: triangle1[i][0] + triangle2[i][2] });
+    arr[2].push({ c: 2, op: +1, v: triangle1[i][0] - triangle2[i][2] });
     //y translation
-    push(arr[3], 1, -1, a[i][1] + b[i][1]);
-    push(arr[3], 1, +1, a[i][1] - b[i][1]);
-    push(arr[4], 0, -1, a[i][1] + b[i][0]);
-    push(arr[4], 0, +1, a[i][1] - b[i][0]);
-    push(arr[5], 2, -1, a[i][1] + b[i][2]);
-    push(arr[5], 2, +1, a[i][1] - b[i][2]);
+    arr[3].push({ c: 1, op: -1, v: triangle1[i][1] + triangle2[i][1] });
+    arr[3].push({ c: 1, op: +1, v: triangle1[i][1] - triangle2[i][1] });
+    arr[4].push({ c: 0, op: -1, v: triangle1[i][1] + triangle2[i][0] });
+    arr[4].push({ c: 0, op: +1, v: triangle1[i][1] - triangle2[i][0] });
+    arr[5].push({ c: 2, op: -1, v: triangle1[i][1] + triangle2[i][2] });
+    arr[5].push({ c: 2, op: +1, v: triangle1[i][1] - triangle2[i][2] });
     //z translation
-    push(arr[6], 2, -1, a[i][2] + b[i][2]);
-    push(arr[6], 2, +1, a[i][2] - b[i][2]);
-    push(arr[7], 0, -1, a[i][2] + b[i][0]);
-    push(arr[7], 0, +1, a[i][2] - b[i][0]);
-    push(arr[8], 1, -1, a[i][2] + b[i][1]);
-    push(arr[8], 1, +1, a[i][2] - b[i][1]);
+    arr[6].push({ c: 2, op: -1, v: triangle1[i][2] + triangle2[i][2] });
+    arr[6].push({ c: 2, op: +1, v: triangle1[i][2] - triangle2[i][2] });
+    arr[7].push({ c: 0, op: -1, v: triangle1[i][2] + triangle2[i][0] });
+    arr[7].push({ c: 0, op: +1, v: triangle1[i][2] - triangle2[i][0] });
+    arr[8].push({ c: 1, op: -1, v: triangle1[i][2] + triangle2[i][1] });
+    arr[8].push({ c: 1, op: +1, v: triangle1[i][2] - triangle2[i][1] });
   }
   let xyz_translations = [];
   for (const mod of arr) {
@@ -152,6 +153,7 @@ function findTranslation(a, b) {
 
 //extract xyz
 const findCommonModifier = (mod) => {
+  // how many sorted 'v's are the same in a row at most
   let a = mod.slice(0);
   a.sort((x, y) => x.v - y.v);
 
