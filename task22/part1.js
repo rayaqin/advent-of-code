@@ -37,33 +37,23 @@ const solution = (source) => {
       maxPoint: { x: parseInt(x.to), y: parseInt(y.to), z: parseInt(z.to) },
     };
   });
-
-  let resultCuboidsWithMatrixes = [];
+  let resultCuboids = [];
 
   commands.forEach((commandCuboid) => {
-    if (resultCuboidsWithMatrixes.length === 0) {
-      resultCuboidsWithMatrixes.push(addFilledMatrixToCuboidData(commandCuboid, commandCuboid.commandType == 'on' ? 1 : 0));
+    if (resultCuboids.length === 0) {
+      resultCuboids.push({ minPoint: commandCuboid.minPoint, maxPoint: commandCuboid.maxPoint });
     } else {
-      resultCuboidsWithMatrixes.forEach((existingCuboid, index) => {
-        if (checkIfTwoCuboidDataIntersect(existingCuboid, commandCuboid)) {
-          resultCuboidsWithMatrixes.push(getEngulfingCuboidWithMatrix(existingCuboid, commandCuboid));
-          resultCuboidsWithMatrixes[index] = null;
-        } else if (commandCuboid.commandType === 'on') {
-          resultCuboidsWithMatrixes.push(addFilledMatrixToCuboidData(commandCuboid, 1));
+      resultCuboids.forEach((existingCuboid) => {
+        if (checkIfTwoCuboidDataIntersect(commandCuboid, existingCuboid)) {
+          resultCuboids.push(getCuboidsAfterCommandExecution(commandCuboid, existingCuboid));
+        } else {
+          resultCuboids.push({ minPoint: commandCuboid.minPoint, maxPoint: commandCuboid.maxPoint });
         }
       });
-      resultCuboidsWithMatrixes = resultCuboidsWithMatrixes.filter((a) => a !== null);
     }
   });
 
-  console.log(resultCuboidsWithMatrixes);
-};
-
-const addFilledMatrixToCuboidData = (commandCuboid, fillValue) => {
-  return {
-    ...commandCuboid,
-    matrix: createMatrixFromCuboidData(commandCuboid, fillValue),
-  };
+  console.log(resultCuboids);
 };
 
 const checkIfTwoCuboidDataIntersect = (cuboidData1, cuboidData2) =>
@@ -74,115 +64,131 @@ const checkIfTwoCuboidDataIntersect = (cuboidData1, cuboidData2) =>
   cuboidData1.minPoint.z <= cuboidData2.maxPoint.z &&
   cuboidData1.maxPoint.z >= cuboidData2.minPoint.z;
 
-const getEngulfingCuboidMinMax = (cuboidData1, cuboidData2) => {
-  return {
-    minPoint: {
-      x: Math.min(cuboidData1.minPoint.x, cuboidData2.minPoint.x),
-      y: Math.min(cuboidData1.minPoint.y, cuboidData2.minPoint.y),
-      z: Math.min(cuboidData1.minPoint.z, cuboidData2.minPoint.z),
-    },
-    maxPoint: {
-      x: Math.max(cuboidData1.maxPoint.x, cuboidData2.maxPoint.x),
-      y: Math.max(cuboidData1.maxPoint.y, cuboidData2.maxPoint.y),
-      z: Math.max(cuboidData1.maxPoint.z, cuboidData2.maxPoint.z),
-    },
-  };
-};
+const getCuboidsAfterCommandExecution = (commandCuboid, existingCuboid) => {
+  console.log('offing: ', commandCuboid, existingCuboid);
+  let xRanges = getResultRanges(
+    existingCuboid.minPoint.x,
+    existingCuboid.maxPoint.x,
+    commandCuboid.minPoint.x,
+    commandCuboid.maxPoint.x
+  );
+  let yRanges = getResultRanges(
+    existingCuboid.minPoint.y,
+    existingCuboid.maxPoint.y,
+    commandCuboid.minPoint.y,
+    commandCuboid.maxPoint.y
+  );
+  let zRanges = getResultRanges(
+    existingCuboid.minPoint.z,
+    existingCuboid.maxPoint.z,
+    commandCuboid.minPoint.z,
+    commandCuboid.maxPoint.z
+  );
 
-const createMatrixFromCuboidData = (cuboidData, fillValue) => {
-  let matrix = [];
+  let cuboidSlices = [];
 
-  for (let x = 0; x <= cuboidData.maxPoint.x - cuboidData.minPoint.x; x++) {
-    matrix.push([]);
-    for (let y = 0; y <= cuboidData.maxPoint.y - cuboidData.minPoint.y; y++) {
-      matrix[x] ? matrix[x].push([]) : (matrix[x] = []);
-      for (let z = 0; z <= cuboidData.maxPoint.z - cuboidData.minPoint.z; z++) {
-        matrix[x][y] ? matrix[x][y].push(fillValue) : (matrix[x][y] = [fillValue]);
+  console.log('xRanges: ', xRanges, 'yRanges: ', yRanges, 'zRanges: ', zRanges);
+  debugger;
+  xRanges.forEach((xRange) => {
+    cuboidSlices.push({
+      minPoint: {
+        x: xRange.min,
+        y: existingCuboid.minPoint.y,
+        z: existingCuboid.minPoint.z,
+      },
+      maxPoint: {
+        x: xRange.max,
+        y: existingCuboid.maxPoint.y,
+        z: existingCuboid.maxPoint.z,
+      },
+    });
+  });
+  yRanges.forEach((yRange) => {
+    cuboidSlices.push({
+      minPoint: {
+        x: existingCuboid.minPoint.x,
+        y: yRange.min,
+        z: existingCuboid.minPoint.z,
+      },
+      maxPoint: {
+        x: existingCuboid.maxPoint.x,
+        y: yRange.max,
+        z: existingCuboid.maxPoint.z,
+      },
+    });
+  });
+  zRanges.forEach((zRange) => {
+    cuboidSlices.push({
+      minPoint: {
+        x: existingCuboid.minPoint.x,
+        y: existingCuboid.minPoint.y,
+        z: zRange.min,
+      },
+      maxPoint: {
+        x: existingCuboid.maxPoint.x,
+        y: existingCuboid.maxPoint.y,
+        z: zRange.max,
+      },
+    });
+  });
+
+  console.log(cuboidSlices);
+  for (let i = 0; i < cuboidSlices.length; i++) {
+    for (let j = i; j < cuboidSlices.length; j++) {
+      if (i !== j && checkIfTwoCuboidDataIntersect(cuboidSlices[i], cuboidSlices[j])) {
+        cuboidSlices[i] = avoidOverlapByReduction(cuboidSlices[i], cuboidSlices[j]);
       }
     }
   }
-  return matrix;
+
+  return cuboidSlices;
 };
 
-const getEngulfingCuboidWithMatrix = (existingCuboid, commandCuboid) => {
-  let newEngulfingCuboidData = getEngulfingCuboidMinMax(existingCuboid, commandCuboid);
-  newEngulfingCuboidData.matrix = createMatrixFromCuboidData(newEngulfingCuboidData, 0);
-  overWriteBigMatrixValuesWithSmall(newEngulfingCuboidData, existingCuboid);
-  overWriteBigMatrixValuesWithSmall(newEngulfingCuboidData, commandCuboid);
-  return newEngulfingCuboidData;
-};
-
-const overWriteBigMatrixValuesWithSmall = (big, small) => {
-  debugger;
-  for (let x = big.minPoint.x; x <= big.maxPoint.x; x++) {
-    for (let y = big.minPoint.y; y <= big.maxPoint.y; y++) {
-      for (let z = big.minPoint.z; z <= big.maxPoint.z; z++) {
-        if (
-          x >= small.minPoint.x &&
-          x <= small.maxPoint.x &&
-          y >= small.minPoint.y &&
-          y <= small.maxPoint.y &&
-          z >= small.minPoint.z &&
-          z <= small.maxPoint.z
-        ) {
-          if (small.matrix) {
-            debugger;
-            big.matrix[x - big.minPoint.x][y - big.minPoint.y][z - big.minPoint.z] =
-              small.matrix[x - small.minPoint.x][y - small.minPoint.y][z - small.minPoint.z];
-          } else {
-            big.matrix[x - big.minPoint.x][y - big.minPoint.y][z - big.minPoint.z] = small.commandType == 'on' ? 1 : 0;
-          }
-        }
-      }
-    }
+const getResultRanges = (existingMin, existingMax, commandMin, commandMax) => {
+  if (commandMin <= existingMin && commandMax >= existingMax) {
+    return [];
   }
+  if (commandMin <= existingMin && commandMax < existingMax && commandMax >= existingMin) {
+    return [{ min: commandMax + 1, max: existingMax }];
+  }
+  if (commandMin >= existingMin && commandMin <= existingMax && commandMax >= existingMax) {
+    return [{ min: existingMin, max: commandMin - 1 }];
+  }
+  if (commandMin > existingMin && commandMax < existingMax) {
+    return [
+      { min: existingMin, max: commandMin - 1 },
+      { min: commandMax + 1, max: existingMax },
+    ];
+  }
+  return ['wtf'];
 };
 
-/*   let newRelativeXMin1 = cuboidData1.minPoint.x - bigCuboidData.minPoint.x;
-  let newRelativeYMin1 = cuboidData1.minPoint.y - bigCuboidData.minPoint.y;
-  let newRelativeZMin1 = cuboidData1.minPoint.z - bigCuboidData.minPoint.z;
+// only run this if slices intersect
+const avoidOverlapByReduction = (sliceA, sliceB) => {
+  return getCuboidsAfterCommandExecution({ ...sliceB, commandType: 'off' }, sliceA)[0];
+};
 
-  let newRelativeXMax1 = bigCuboidData.maxPoint.x - cuboidData1.maxPoint.x;
-  let newRelativeYMax1 = bigCuboidData.maxPoint.y - cuboidData1.maxPoint.y;
-  let newRelativeZMax1 = bigCuboidData.maxPoint.z - cuboidData1.maxPoint.z;
+/* on x=5..10,y=5..10,z=5..10
+off x=7..8,y=4..11,z=4..11
+=>
+x5..6, y5..10, z5..10
+x9..10, y5..10, z5..10
 
-  let newRelativeXMin2 = cuboidData2.minPoint.x - bigCuboidData.minPoint.x;
-  let newRelativeYMin2 = cuboidData2.minPoint.y - bigCuboidData.minPoint.y;
-  let newRelativeZMin2 = cuboidData2.minPoint.z - bigCuboidData.minPoint.z;
+on x=5..10,y=5..10,z=5..10
+off x=4..6,y=4..11,z=4..11
+=>
+x7..10, y5..10, z5..10
 
-  let newRelativeXMax2 = bigCuboidData.maxPoint.x - cuboidData2.maxPoint.x;
-  let newRelativeYMax2 = bigCuboidData.maxPoint.y - cuboidData2.maxPoint.y;
-  let newRelativeZMax2 = bigCuboidData.maxPoint.z - cuboidData2.maxPoint.z;
+on x=5..10,y=5..10,z=5..10
+off x=4..6,y=4..6,z=4..11
+=>
+x7..10, y5..10, z5..10
+x5..10, y7..10, z5..10
 
-  debugger;
-
-  for (let x = 0; x < bigCuboidData.matrix.length; x++) {
-    for (let y = 0; y < bigCuboidData.matrix[x].length; y++) {
-      for (let z = 0; z < bigCuboidData.matrix[y].length; z++) {
-        if (
-          x >= newRelativeXMin1 &&
-          x <= newRelativeXMax1 &&
-          y >= newRelativeYMin1 &&
-          y <= newRelativeYMax1 &&
-          z >= newRelativeZMin1 &&
-          z <= newRelativeZMax1 &&
-          cuboidData1.commandType == 'on'
-        ) {
-          debugger;
-          bigCuboidData.matrix[x][y][z] = 1;
-        }
-        if (
-          x >= newRelativeXMin2 &&
-          x <= newRelativeXMax2 &&
-          y >= newRelativeYMin2 &&
-          y <= newRelativeYMax2 &&
-          z >= newRelativeZMin2 &&
-          z <= newRelativeZMax2 &&
-          cuboidData2.commandType == 'on'
-        ) {
-          debugger;
-          bigCuboidData.matrix[x][y][z] = 1;
-        }
-      }
-    }
-  } */
+on x=5..10,y=5..10,z=5..10
+off x=7..8,y=7..8,z=4..11
+=>
+x5..6, y5..10, z5..10
+x9..10, y5..10, z5..10
+x5..10, y5..6, z5..10
+x5..10, y9..10, z5..10 */

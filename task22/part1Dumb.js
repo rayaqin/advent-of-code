@@ -126,7 +126,6 @@ const overWriteBigMatrixValuesWithSmall = (big, small) => {
           z <= small.maxPoint.z
         ) {
           if (small.matrix) {
-            debugger;
             big.matrix[x - big.minPoint.x][y - big.minPoint.y][z - big.minPoint.z] =
               small.matrix[x - small.minPoint.x][y - small.minPoint.y][z - small.minPoint.z];
           } else {
