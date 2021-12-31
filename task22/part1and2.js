@@ -43,17 +43,40 @@ const solution = (source) => {
     if (resultCuboids.length === 0) {
       resultCuboids.push({ minPoint: commandCuboid.minPoint, maxPoint: commandCuboid.maxPoint });
     } else {
-      resultCuboids.forEach((existingCuboid) => {
+      let currentResults = [];
+      for (let i = 0; i < resultCuboids.length; i++) {
+        let existingCuboid = resultCuboids[i];
         if (checkIfTwoCuboidDataIntersect(commandCuboid, existingCuboid)) {
-          resultCuboids.push(getCuboidsAfterCommandExecution(commandCuboid, existingCuboid));
-        } else {
-          resultCuboids.push({ minPoint: commandCuboid.minPoint, maxPoint: commandCuboid.maxPoint });
+          let remnantsOfExisting = getCuboidsAfterCommandExecution(commandCuboid, existingCuboid);
+          remnantsOfExisting.forEach((remnant) => {
+            currentResults.push(remnant);
+          });
+          resultCuboids[i] = null;
         }
+      }
+      if (commandCuboid.commandType === 'on') {
+        currentResults.push({ minPoint: commandCuboid.minPoint, maxPoint: commandCuboid.maxPoint });
+      }
+      resultCuboids = resultCuboids.filter((a) => a !== null);
+      currentResults.forEach((resultCuboid) => {
+        resultCuboids.push(resultCuboid);
       });
     }
   });
 
   console.log(resultCuboids);
+  console.log(calculateSumOfCuboidVolumes(resultCuboids));
+};
+
+const calculateSumOfCuboidVolumes = (listOfCuboids) => {
+  return listOfCuboids.reduce(
+    (acc, curr) =>
+      (acc +=
+        (curr.maxPoint.x + 1 - curr.minPoint.x) *
+        (curr.maxPoint.y + 1 - curr.minPoint.y) *
+        (curr.maxPoint.z + 1 - curr.minPoint.z)),
+    0
+  );
 };
 
 const checkIfTwoCuboidDataIntersect = (cuboidData1, cuboidData2) =>
@@ -64,8 +87,15 @@ const checkIfTwoCuboidDataIntersect = (cuboidData1, cuboidData2) =>
   cuboidData1.minPoint.z <= cuboidData2.maxPoint.z &&
   cuboidData1.maxPoint.z >= cuboidData2.minPoint.z;
 
+const checkIfTwoCuboidDataIdentical = (cuboidData1, cuboidData2) =>
+  cuboidData1.minPoint.x == cuboidData2.maxPoint.x &&
+  cuboidData1.maxPoint.x == cuboidData2.minPoint.x &&
+  cuboidData1.minPoint.y == cuboidData2.maxPoint.y &&
+  cuboidData1.maxPoint.y == cuboidData2.minPoint.y &&
+  cuboidData1.minPoint.z == cuboidData2.maxPoint.z &&
+  cuboidData1.maxPoint.z == cuboidData2.minPoint.z;
+
 const getCuboidsAfterCommandExecution = (commandCuboid, existingCuboid) => {
-  console.log('offing: ', commandCuboid, existingCuboid);
   let xRanges = getResultRanges(
     existingCuboid.minPoint.x,
     existingCuboid.maxPoint.x,
@@ -87,8 +117,6 @@ const getCuboidsAfterCommandExecution = (commandCuboid, existingCuboid) => {
 
   let cuboidSlices = [];
 
-  console.log('xRanges: ', xRanges, 'yRanges: ', yRanges, 'zRanges: ', zRanges);
-  debugger;
   xRanges.forEach((xRange) => {
     cuboidSlices.push({
       minPoint: {
@@ -132,10 +160,13 @@ const getCuboidsAfterCommandExecution = (commandCuboid, existingCuboid) => {
     });
   });
 
-  console.log(cuboidSlices);
   for (let i = 0; i < cuboidSlices.length; i++) {
     for (let j = i; j < cuboidSlices.length; j++) {
-      if (i !== j && checkIfTwoCuboidDataIntersect(cuboidSlices[i], cuboidSlices[j])) {
+      if (
+        i !== j &&
+        !checkIfTwoCuboidDataIdentical(cuboidSlices[i], cuboidSlices[j]) &&
+        checkIfTwoCuboidDataIntersect(cuboidSlices[i], cuboidSlices[j])
+      ) {
         cuboidSlices[i] = avoidOverlapByReduction(cuboidSlices[i], cuboidSlices[j]);
       }
     }
@@ -167,28 +198,3 @@ const getResultRanges = (existingMin, existingMax, commandMin, commandMax) => {
 const avoidOverlapByReduction = (sliceA, sliceB) => {
   return getCuboidsAfterCommandExecution({ ...sliceB, commandType: 'off' }, sliceA)[0];
 };
-
-/* on x=5..10,y=5..10,z=5..10
-off x=7..8,y=4..11,z=4..11
-=>
-x5..6, y5..10, z5..10
-x9..10, y5..10, z5..10
-
-on x=5..10,y=5..10,z=5..10
-off x=4..6,y=4..11,z=4..11
-=>
-x7..10, y5..10, z5..10
-
-on x=5..10,y=5..10,z=5..10
-off x=4..6,y=4..6,z=4..11
-=>
-x7..10, y5..10, z5..10
-x5..10, y7..10, z5..10
-
-on x=5..10,y=5..10,z=5..10
-off x=7..8,y=7..8,z=4..11
-=>
-x5..6, y5..10, z5..10
-x9..10, y5..10, z5..10
-x5..10, y5..6, z5..10
-x5..10, y9..10, z5..10 */
