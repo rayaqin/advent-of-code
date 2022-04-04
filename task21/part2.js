@@ -46,7 +46,7 @@ const solution = (source) => {
           for (let r2 of rolls) {
             for (let r3 of rolls) {
               const nextPositions = [positions[0], positions[1]];
-              nextPositions[i] = ((positions[i] + r1 + r2 + r3 - 1) % 10) + 1; // bc 10 should not result in 0
+              nextPositions[i] = ((positions[i] + r1 + r2 + r3 - 1) % 10) + 1; // -+1 bc 10 should not become 0
 
               const nextScores = [scores[0], scores[1]];
               nextScores[i] += nextPositions[i];

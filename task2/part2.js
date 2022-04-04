@@ -1,9 +1,7 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log('File APIs are supported in your browser, you may proceed.');
 } else {
-  alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
-  );
+  alert("The File APIs are not fully supported in this browser. The code won't work.");
 }
 
 const chooseFile = document.getElementById('choose-file');
@@ -31,6 +29,8 @@ const solution = (source) => {
   let horizontalPosition = 0;
   let depth = 0;
   let aim = 0;
+
+  console.log({ data: source });
 
   const instructions = source.split('\n').map((line) => {
     let splitLine = line.split(' ');

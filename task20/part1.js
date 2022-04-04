@@ -39,7 +39,7 @@ const solution = (source) => {
 
   console.log(algorithm, inputImage, addOuterRim(inputImage, infiniteGridState));
 
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 2; i++) {
     inputImage = performOneEnhancement(inputImage, infiniteGridState, algorithm);
     infiniteGridState = infiniteGridState ? 0 : 1;
   }
