@@ -1,0 +1,92 @@
+
+
+#############
+#...........#
+###C#C#A#B###
+  #D#C#B#A#
+  #D#B#A#C#
+  #D#D#B#A#
+  #########
+
+
+
+Amphipod:
+{
+  type: 'A' | 'B' | 'C' | 'D',
+  id: 1 | 2 | 3 | 4,
+}
+
+Tile:
+{
+  type: 'floor' | 'wall',
+  occupant: Amphipod | null,
+  X: number,
+  Y: number,
+  room: Room | null,
+  isDoorway: boolean,
+  locked: boolean,
+}
+
+Room:
+{
+  id: 'A' | 'B' | 'C' | 'D',
+  tiles: Tile[],
+}
+
+An Amphipod's type is the id of the Room that is it's destination.
+
+- parse data as a matrix of Tile objects called Tiles
+
+- detect room coordinates, and add the tiles to the right Room's list of tiles
+
+Loop:
+ -  go through each tile in Tiles
+ -  if it's occupant is an amphipod, and it isn't locked, calculate the legal paths* by checking each possible destination floor tile with a '.' value in it,
+    calculate the used energy, and start a new loop for each possible step. Mark an amphipod's tile as locked after it enters a room.
+ -  end a traversal if all the room tiles are locked, or no more legal steps can be taken
+ -  when ending the traversal, put the energy cost in a sorted list
+ -  return smallest value in the sorted list after all the recursion is done
+
+
+
+ *Legal path check for a selected destination floor tile:
+ [room tile] = floor tile that is in a room
+ [hallway tile] = floor tile that is not in a room
+
+
+- If the amphipod currently occupies a [hallway tile]:
+  - the destination is a [room tile]
+  &&
+  - the destination [room tile] is in a room that is the right final destination room for the amphipod
+  &&
+  - the destination [room tile] is in a room where there are no other kinds of amphipods present
+  &&
+  - the path from the amphipod to the selected [room tile] is walkable*
+  &&
+  - the selected [room tile] does not have the '.' value in the [room tile] underneath it
+
+- If the amphipod's current position is a [room tile]:
+  - If the selected tile is a floor tile that is not in a [room tile]:
+    - the path from the amphipod to the selected [hallway tile] is walkable*
+  - If the selected tile is a [room tile]:
+    - the selected [room tile] in a room that is the destination room for the amphipod
+    &&
+    - the selected [room tile] is in a room where there are no other kind of amphipods
+    &&
+    - the path from the amphipod to the selected [room tile] is walkable*
+    &&
+    - the selected [room tile] does not have the '.' value in the [room tile] underneath it
+
+
+*Getting the walkable path between amphipod's current tile and destination tile:
+  1:  Create Path, Tile[]
+  2:  Check which X value is bigger, the amphipod's current Tile's or the destination's, and start adding or substracting 1 from the amphipod's current Tile's X value,
+      adding the Tile on that XY position to the list each time, if it is a '.' value, until the destination's X value is reached.
+      If a non-'.'-value is encountered, remove all items from Path, exit the loop, and skip step 4.
+  3:  Do the same with Y, but using the last new X from the previous step for the a starting point
+  4:  If Path is empty:
+        - 4a: Check which Y value is bigger, the amphipod's current Tile's or the destination's, and start adding or substracting 1 from the amphipod's current Tile's Y value,
+        adding the Tile on that XY position to the list each time, if it is a '.' value, until the destination's Y value is reached.
+        If a non-'.'-value is encountered, remove all items from Path, exit the loop, and skip step 4b.
+        - 4b:  Do the same with X, but using the last new Y from the previous step for the a starting point
+  5:  If Path has items in the list, return {path: ...Path} otherwise return null

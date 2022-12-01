@@ -5,6 +5,8 @@ body {
   min-height: 460px;
   width: 100vw;
   overflow: hidden;
+  font-family: "Roboto";
+  letter-spacing: 2px;
 }
 
 #background {
@@ -13,46 +15,78 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   background-color: rgb(18, 29, 18);
 }
 
 #input-wrapper {
-  cursor: pointer;
-  background-color: rgb(53, 92, 53);
-  color: white;
-  padding: 12px 18px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 32px;
   transition: all 0.2s ease-in-out;
 }
 
 #input-wrapper:hover {
   transform: scale(1.02);
+}
+
+#input-label {
+  cursor: pointer;
+  background-color: rgb(53, 92, 53);
+  color: white;
+  padding: 12px 18px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  font-size: 32px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 6px;
+}
+
+#input-label:hover {
   background-color: rgb(63, 148, 63);
 }
 
-#canvas-wrapper {
-  display: none;
-  width: 85%;
-  padding: 24px;
-  border-radius: 24px;
-  background-color: black;
+#part-selection {
+  width: 100%;
+  display: flex;
+  visibility: hidden;
+  justify-content: space-between;
 }
 
-#canvas {
-  overflow: auto;
-  padding: 4px;
-  color: rgb(60, 220, 60);
-  min-height: 250px;
-  max-height: 600px;
+#part-selection > button {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: rgb(53, 92, 53);
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: all 0.3s ease-in-out;
+  padding: 12px 56px;
+  font-size: 18px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 6px;
 }
 
-input[type='file'] {
+#part-selection > button:hover {
+  transform: scale(1.04);
+  background-color: rgb(63, 148, 63);
+}
+
+#message-to-user {
+  color: rgb(79, 121, 79);
+  min-height: 18px;
+  margin-top: 24px;
+  transition: opacity 2s ease-in-out;
+}
+
+.invisible {
+  color: rgb(18, 29, 18) !important;
+  opacity: 0;
+}
+
+input[type="file"] {
   position: absolute;
   left: -9999px;
 }
-input[type='file'] {
+input[type="file"] {
   position: absolute;
   left: -9999px;
 }
