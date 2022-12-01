@@ -9,14 +9,20 @@
   </head>
   <body>
     <div id="background">
-      <div id="canvas-wrapper">
-        <div id="canvas"></div>
+      <div id="button-section">
+        <div id="input-wrapper">
+          <label for="choose-file" id="input-label">
+            select source file
+            <input type="file" id="choose-file" />
+          </label>
+        </div>
+        <div id="part-selection">
+          <button onclick="solveSelectedPart(1)">I</button>
+          <button onclick="solveSelectedPart(2)">II</button>
+        </div>
       </div>
-      <label for="choose-file" id="input-wrapper">
-        select source file
-        <input type="file" id="choose-file" />
-      </label>
+      <div id="message-to-user" class="invisible"></div>
     </div>
   </body>
-  <script src="./task3/part1.js"></script>
+  <script src="./task3/solution.js"></script>
 </html>
