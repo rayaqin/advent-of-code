@@ -40,42 +40,33 @@ const solveSelectedPart = (partId) => {
   console.log(`Solution for part ${partId}:`, solution);
 };
 
-const rock = {};
-const paper = {};
-const scissors = {};
-
-rock.beats = scissors;
-rock.score = 1;
-
-paper.beats = rock;
-paper.score = 2;
-
-scissors.beats = paper;
-scissors.score = 3;
-
-const scoreMap = {
-  win: 6,
-  draw: 3,
-  loss: 0,
-};
-
 const getSolutionForPart1 = (source) => {
-  const guide = source.split("\r\n").map((row) => ({ first: row.split(" ")[0], second: row.split(" ")[1] }));
+  const rock = {};
+  const paper = {};
+  const scissors = {};
 
-  const symbolToShapeMap = {
-    A: rock,
-    X: rock,
-    B: paper,
-    Y: paper,
-    C: scissors,
-    Z: scissors,
+  rock.beats = scissors;
+  rock.score = 1;
+
+  paper.beats = rock;
+  paper.score = 2;
+
+  scissors.beats = paper;
+  scissors.score = 3;
+
+  const scoreMap = {
+    win: 6,
+    draw: 3,
+    loss: 0,
   };
+
+  const guide = source.split("\r\n").map((row) => ({ first: row.split(" ")[0], second: row.split(" ")[1] }));
 
   let playerScore = 0;
 
   guide.forEach((match) => {
-    const opponentShape = symbolToShapeMap[match.first];
-    const ourShape = symbolToShapeMap[match.second];
+    const opponentShape = getShapeFromSymbolPartOne(match.first, rock, paper, scissors);
+    const ourShape = getShapeFromSymbolPartOne(match.second, rock, paper, scissors);
 
     playerScore += ourShape.score + scoreMap[getMatchResultFromShapes(opponentShape, ourShape)];
   });
@@ -85,30 +76,41 @@ const getSolutionForPart1 = (source) => {
 
 const getSolutionForPart2 = (source) => {
   const guide = source.split("\r\n").map((row) => ({ first: row.split(" ")[0], second: row.split(" ")[1] }));
-
-  const symbolToShapeMap = {
-    A: rock,
-    B: paper,
-    C: scissors,
-  };
-
-  const symbolToDesiredResultMap = {
-    X: "lose",
-    Y: "draw",
-    Z: "win",
-  };
-
   let playerScore = 0;
 
   guide.forEach((match) => {
-    const opponentShape = symbolToShapeMap[match.first];
-    const desiredResult = symbolToDesiredResultMap[match.second];
+    const opponentShape = getShapeFromSymbolPartTwo(match.first, rock, paper, scissors);
+    const desiredResult = getDesiredResultFromSymbol(match.second);
     const ourShape = getNeededResponseShape(opponentShape, desiredResult);
 
     playerScore += ourShape.score + scoreMap[getMatchResultFromShapes(opponentShape, ourShape)];
   });
 
   return playerScore;
+};
+
+const getShapeFromSymbolPartOne = (symbol, rock, paper, scissors) => {
+  if (symbol === "A" || symbol === "X") {
+    return rock;
+  }
+  if (symbol === "B" || symbol === "Y") {
+    return paper;
+  }
+  if (symbol === "C" || symbol === "Z") {
+    return scissors;
+  }
+};
+
+const getShapeFromSymbolPartTwo = (symbol, rock, paper, scissors) => {
+  if (symbol === "A") {
+    return rock;
+  }
+  if (symbol === "B") {
+    return paper;
+  }
+  if (symbol === "C") {
+    return scissors;
+  }
 };
 
 const getMatchResultFromShapes = (opponentShape, ourShape) => {
@@ -119,6 +121,18 @@ const getMatchResultFromShapes = (opponentShape, ourShape) => {
     return "loss";
   }
   return "win";
+};
+
+const getDesiredResultFromSymbol = (symbol) => {
+  if (symbol === "X") {
+    return "lose";
+  }
+  if (symbol === "Y") {
+    return "draw";
+  }
+  if (symbol === "Z") {
+    return "win";
+  }
 };
 
 const getNeededResponseShape = (opponentShape, desiredResult) => {
