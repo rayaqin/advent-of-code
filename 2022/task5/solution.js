@@ -40,6 +40,19 @@ const solveSelectedPart = (partId) => {
   console.log(`Solution for part ${partId}:`, solution);
 };
 
+const getSolutionForPart1 = (source) => {
+  const { stacksMap, operations } = getParsedData(source);
+  operations.forEach((operation) => performOperationOne(operation, stacksMap));
+  return listTopCrates(stacksMap);
+};
+
+const getSolutionForPart2 = (source) => {
+  const { stacksMap, operations } = getParsedData(source);
+  operations.forEach((operation) => performOperationTwo(operation, stacksMap));
+  console.log(stacksMap);
+  return listTopCrates(stacksMap);
+};
+
 const isRelevantCharacter = (str) => {
   return !!(str.toString().length === 1 && str.toString().match(/[A-Z1-9]/i));
 };
@@ -110,17 +123,4 @@ const listTopCrates = (stacksMap) => {
     result += stacksMap[key][stacksMap[key].length - 1];
   });
   return result;
-};
-
-const getSolutionForPart1 = (source) => {
-  const { stacksMap, operations } = getParsedData(source);
-  operations.forEach((operation) => performOperationOne(operation, stacksMap));
-  return listTopCrates(stacksMap);
-};
-
-const getSolutionForPart2 = (source) => {
-  const { stacksMap, operations } = getParsedData(source);
-  operations.forEach((operation) => performOperationTwo(operation, stacksMap));
-  console.log(stacksMap);
-  return listTopCrates(stacksMap);
 };

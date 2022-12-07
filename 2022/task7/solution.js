@@ -40,6 +40,34 @@ const solveSelectedPart = (partId) => {
   console.log(`Solution for part ${partId}:`, solution);
 };
 
+const getSolutionForPart1 = (source) => {
+  const cmdLines = source.split("\r\n").map((line) => getParsedLine(line));
+  const rootNode = getRootNodeBasedOnCmdLines(cmdLines);
+
+  const smallDirectories = [];
+  findDirectoriesWithMaxSize(rootNode, 100000, smallDirectories);
+
+  const sum = smallDirectories.reduce((acc, curr) => acc + curr.size, 0);
+
+  return sum;
+};
+
+const getSolutionForPart2 = (source) => {
+  const cmdLines = source.split("\r\n").map((line) => getParsedLine(line));
+  const rootNode = getRootNodeBasedOnCmdLines(cmdLines);
+
+  const requiredFreeSpace = 30000000;
+  const allSpace = 70000000;
+  const freeSpaceStillNeeded = requiredFreeSpace - (allSpace - rootNode.size);
+
+  const bigEnoughDirectories = [];
+  findDirectoriesWithMinSize(rootNode, freeSpaceStillNeeded, bigEnoughDirectories);
+
+  const directoryToDelete = bigEnoughDirectories.reduce((acc, curr) => (curr.size <= acc.size ? curr : acc), rootNode);
+
+  return directoryToDelete.size;
+};
+
 const getParsedLine = (line) => {
   if (line[0] === "$") {
     if (line.indexOf("ls") === 2) {
@@ -155,32 +183,4 @@ const findDirectoriesWithMinSize = (currentNode, minSize, resultArray) => {
     });
   }
   return;
-};
-
-const getSolutionForPart1 = (source) => {
-  const cmdLines = source.split("\r\n").map((line) => getParsedLine(line));
-  const rootNode = getRootNodeBasedOnCmdLines(cmdLines);
-
-  const smallDirectories = [];
-  findDirectoriesWithMaxSize(rootNode, 100000, smallDirectories);
-
-  const sum = smallDirectories.reduce((acc, curr) => acc + curr.size, 0);
-
-  return sum;
-};
-
-const getSolutionForPart2 = (source) => {
-  const cmdLines = source.split("\r\n").map((line) => getParsedLine(line));
-  const rootNode = getRootNodeBasedOnCmdLines(cmdLines);
-
-  const requiredFreeSpace = 30000000;
-  const allSpace = 70000000;
-  const freeSpaceStillNeeded = requiredFreeSpace - (allSpace - rootNode.size);
-
-  const bigEnoughDirectories = [];
-  findDirectoriesWithMinSize(rootNode, freeSpaceStillNeeded, bigEnoughDirectories);
-
-  const directoryToDelete = bigEnoughDirectories.reduce((acc, curr) => (curr.size <= acc.size ? curr : acc), rootNode);
-
-  return directoryToDelete.size;
 };

@@ -41,138 +41,95 @@ const solveSelectedPart = (partId) => {
 };
 
 const getSolutionForPart1 = (source) => {
-  const wires = source.split("\n");
+  const wires = source.split("\r\n");
+  const wireOneDotsMap = getMapOfDotsFromCommands(wires[0].split(","));
+  const wireTwoDotsMap = getMapOfDotsFromCommands(wires[1].split(","));
 
-  let shortestDistance = Number.MAX_SAFE_INTEGER;
-  let wireOneSet = getSetOfDotsAsStringsFromCommands(wires[0].split(","));
+  const intersections = getIntersections(wireOneDotsMap, wireTwoDotsMap);
 
-  let currentPoint = { x: 0, y: 0 };
-  wires[1].split(",").forEach((c) => {
-    let length = parseInt(c.substring(1));
-    let modifierX = 0;
-    let modifierY = 0;
-    if (c[0] === "R") modifierX = 1;
-    if (c[0] === "L") modifierX = -1;
-    if (c[0] === "U") modifierY = 1;
-    if (c[0] === "D") modifierY = -1;
+  const closestIntersectionDistance = Object.keys(intersections).reduce(
+    (acc, currentKey) => Math.min(getManhattanDistance(0, 0, intersections[currentKey].x, intersections[currentKey].y), acc),
+    Number.MAX_SAFE_INTEGER
+  );
 
-    for (let i = 0; i < length; i++) {
-      currentPoint.x += modifierX;
-      currentPoint.y += modifierY;
-      if (wireOneSet.has(`x:${currentPoint.x},y:${currentPoint.y}`)) {
-        shortestDistance = Math.min(getManhattanDistance(0, 0, currentPoint.x, currentPoint.y), shortestDistance);
-      }
-    }
-  });
-  return shortestDistance;
+  return closestIntersectionDistance;
 };
 
 const getSolutionForPart2 = (source) => {
-  const wires = source.split("\n");
+  const wires = source.split("\r\n");
+  const wireCommandsOne = wires[0].split(",");
+  const wireCommandsTwo = wires[1].split(",");
+  const wireOneDotsMap = getMapOfDotsFromCommands(wireCommandsOne);
+  const wireTwoDotsMap = getMapOfDotsFromCommands(wireCommandsTwo);
 
-  let minimumSignalDelay = Number.MAX_SAFE_INTEGER;
-  const wirePathSetOne = getSetOfDotsAsStringsFromCommands(wires[0].split(","));
-  const wirePathSetTwo = getSetOfDotsAsStringsFromCommands(wires[1].split(","));
-  const wirePathOne = getPathArrayOfDotsAsStringsFromCommands(wires[0].split(","));
-  const wirePathTwo = getPathArrayOfDotsAsStringsFromCommands(wires[1].split(","));
-  const intersections = getIntersections(wirePathSetOne, wirePathSetTwo);
+  const intersections = getIntersections(wireOneDotsMap, wireTwoDotsMap);
 
-  for (let i = 0; i < intersections.length; i++) {
-    minimumSignalDelay = Math.min(
-      getNumberOfStepsNeededUpToIntersection(intersections[i], wirePathOne, wirePathTwo),
-      minimumSignalDelay
-    );
-  }
-  return minimumSignalDelay;
+  const closestIntersectionStepsDistance = Object.keys(intersections).reduce((acc, currentKey) => {
+    let combinedStepsNeeded =
+      getStepsToIntersection(wireCommandsOne, intersections[currentKey]) +
+      getStepsToIntersection(wireCommandsTwo, intersections[currentKey]);
+
+    return combinedStepsNeeded < acc ? combinedStepsNeeded : acc;
+  }, Number.MAX_SAFE_INTEGER);
+
+  return closestIntersectionStepsDistance;
 };
 
-const getIntersections = (setOne, setTwo) => {
-  const intersections = [];
-  setOne.forEach((point) => {
-    if (setTwo.has(point)) {
-      intersections.push(point);
+const getStepsToIntersection = (listOfCommands, intersection) => {
+  let currentPoint = { x: 0, y: 0 };
+
+  let steps = 0;
+
+  for (let i = 0; i < listOfCommands.length; i++) {
+    let length = parseInt(listOfCommands[i].substring(1));
+    let modifierX = 0;
+    let modifierY = 0;
+    if (listOfCommands[i][0] === "R") modifierX = 1;
+    if (listOfCommands[i][0] === "L") modifierX = -1;
+    if (listOfCommands[i][0] === "U") modifierY = 1;
+    if (listOfCommands[i][0] === "D") modifierY = -1;
+
+    for (let i = 0; i < length; i++) {
+      currentPoint.x += modifierX;
+      currentPoint.y += modifierY;
+      steps++;
+      if (currentPoint.x === intersection.x && currentPoint.y === intersection.y) {
+        return steps;
+      }
+    }
+  }
+};
+
+const getMapOfDotsFromCommands = (listOfCommands) => {
+  let currentPoint = { x: 0, y: 0 };
+  let pointMap = {};
+
+  listOfCommands.forEach((c) => {
+    let length = parseInt(c.substring(1));
+    let modifierX = 0;
+    let modifierY = 0;
+    if (c[0] === "R") modifierX = 1;
+    if (c[0] === "L") modifierX = -1;
+    if (c[0] === "U") modifierY = 1;
+    if (c[0] === "D") modifierY = -1;
+
+    for (let i = 0; i < length; i++) {
+      currentPoint.x += modifierX;
+      currentPoint.y += modifierY;
+      pointMap[`x:${currentPoint.x},y:${currentPoint.y}`] = {
+        x: currentPoint.x,
+        y: currentPoint.y,
+      };
     }
   });
+
+  return pointMap;
+};
+
+const getIntersections = (mapOne, mapTwo) => {
+  const intersections = {};
+  Object.keys(mapOne).forEach((key) => (mapTwo[key] ? (intersections[key] = mapOne[key]) : null));
   return intersections;
-};
-
-const getNumberOfStepsNeededUpToIntersection = (point, pathOne, pathTwo) => {
-  let pointsVisitedMapOne = new Map();
-  let pointsVisitedMapTwo = new Map();
-  let stepsOfOne = 0;
-  let stepsOfTwo = 0;
-  for (let i = 0; i < pathOne.length; i++) {
-    if (pathOne[i] === point) {
-      stepsOfOne++;
-      break;
-    }
-    if (!pointsVisitedMapOne.get(pathOne[i])) {
-      stepsOfOne++;
-      pointsVisitedMapOne.set(pathOne[i], stepsOfOne);
-    } else {
-      stepsOfOne = pointsVisitedMapOne.get(pathOne[i]);
-    }
-  }
-  for (let i = 0; i < pathTwo.length; i++) {
-    if (pathTwo[i] === point) {
-      stepsOfTwo++;
-      break;
-    }
-    if (!pointsVisitedMapTwo.get(pathTwo[i])) {
-      pointsVisitedMapTwo.set(pathTwo[i], stepsOfTwo);
-      stepsOfTwo++;
-    } else {
-      stepsOfTwo = pointsVisitedMapTwo.get(pathTwo[i]);
-    }
-  }
-  console.log("steps to this intersection: ", stepsOfOne + stepsOfTwo);
-  return stepsOfOne + stepsOfTwo;
-};
-
-const getSetOfDotsAsStringsFromCommands = (listOfCommands) => {
-  let currentPoint = { x: 0, y: 0 };
-  let pointSet = new Set();
-
-  listOfCommands.forEach((c) => {
-    let length = parseInt(c.substring(1));
-    let modifierX = 0;
-    let modifierY = 0;
-    if (c[0] === "R") modifierX = 1;
-    if (c[0] === "L") modifierX = -1;
-    if (c[0] === "U") modifierY = 1;
-    if (c[0] === "D") modifierY = -1;
-
-    for (let i = 0; i < length; i++) {
-      currentPoint.x += modifierX;
-      currentPoint.y += modifierY;
-      pointSet.add(`x:${currentPoint.x},y:${currentPoint.y}`);
-    }
-  });
-
-  return pointSet;
-};
-
-const getPathArrayOfDotsAsStringsFromCommands = (listOfCommands) => {
-  let currentPoint = { x: 0, y: 0 };
-  let pathArray = [];
-
-  listOfCommands.forEach((c) => {
-    let length = parseInt(c.substring(1));
-    let modifierX = 0;
-    let modifierY = 0;
-    if (c[0] === "R") modifierX = 1;
-    if (c[0] === "L") modifierX = -1;
-    if (c[0] === "U") modifierY = 1;
-    if (c[0] === "D") modifierY = -1;
-
-    for (let i = 0; i < length; i++) {
-      currentPoint.x += modifierX;
-      currentPoint.y += modifierY;
-      pathArray.push(`x:${currentPoint.x},y:${currentPoint.y}`);
-    }
-  });
-
-  return pathArray;
 };
 
 const getManhattanDistance = (x1, x2, y1, y2) => {

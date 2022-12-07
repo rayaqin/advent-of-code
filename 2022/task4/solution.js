@@ -40,23 +40,6 @@ const solveSelectedPart = (partId) => {
   console.log(`Solution for part ${partId}:`, solution);
 };
 
-const getAssignmentPairs = (source) => {
-  return source.split("\r\n").map((line) => {
-    const range1 = line.split(",")[0];
-    const range2 = line.split(",")[1];
-    return {
-      rangeOne: {
-        from: parseInt(range1.split("-")[0]),
-        to: parseInt(range1.split("-")[1]),
-      },
-      rangeTwo: {
-        from: parseInt(range2.split("-")[0]),
-        to: parseInt(range2.split("-")[1]),
-      },
-    };
-  });
-};
-
 const getSolutionForPart1 = (source) => {
   const assignmentPairs = getAssignmentPairs(source);
 
@@ -86,4 +69,21 @@ const getSolutionForPart2 = (source) => {
   });
 
   return partialContainments;
+};
+
+const getAssignmentPairs = (source) => {
+  return source.split("\r\n").map((line) => {
+    const range1 = line.split(",")[0];
+    const range2 = line.split(",")[1];
+    return {
+      rangeOne: {
+        from: parseInt(range1.split("-")[0]),
+        to: parseInt(range1.split("-")[1]),
+      },
+      rangeTwo: {
+        from: parseInt(range2.split("-")[0]),
+        to: parseInt(range2.split("-")[1]),
+      },
+    };
+  });
 };

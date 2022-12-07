@@ -40,17 +40,6 @@ const solveSelectedPart = (partId) => {
   console.log(`Solution for part ${partId}:`, solution);
 };
 
-function checkForRepetition(array) {
-  const seenCharacters = new Set();
-  for (const character of array) {
-    if (seenCharacters.has(character)) {
-      return true;
-    }
-    seenCharacters.add(character);
-  }
-  return false;
-}
-
 const getSolutionForPart1 = (source) => {
   const last3Array = [];
   const sourceArray = source.split("");
@@ -84,3 +73,14 @@ const getSolutionForPart2 = (source) => {
     return i + 1;
   }
 };
+
+function checkForRepetition(array) {
+  const seenCharacters = new Set();
+  for (const character of array) {
+    if (seenCharacters.has(character)) {
+      return true;
+    }
+    seenCharacters.add(character);
+  }
+  return false;
+}
