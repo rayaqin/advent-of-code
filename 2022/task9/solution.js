@@ -69,7 +69,7 @@ const getSolutionForPart1 = (source) => {
     for (let i = 0; i < headMovement.numberOfSteps; i++) {
       headPosition.x += xModifier;
       headPosition.y += yModifier;
-      tailPosition = getNewTailPosition(tailPosition, headPosition);
+      tailPosition = setNewTailPosition(tailPosition, headPosition);
       locationsVisitedByTailSet.add(`${tailPosition.x},${tailPosition.y}`);
     }
   });
@@ -131,30 +131,30 @@ const addTails = (head, tailNumber) => {
 
 const propagateTailMovement = (tail, head, locationsVisitedByTailSet) => {
   if (tail !== undefined) {
-    getNewTailPosition(tail, head);
+    setNewTailPosition(tail, head);
     if (tail.id === 9) locationsVisitedByTailSet.add(`${tail.x},${tail.y}`);
     propagateTailMovement(tail.tail, tail, locationsVisitedByTailSet);
   }
   return head;
 };
 
-const getNewTailPosition = (tailPosition, headPosition) => {
-  const xDistance = Math.abs(tailPosition.x - headPosition.x);
-  const yDistance = Math.abs(tailPosition.y - headPosition.y);
+const setNewTailPosition = (tail, head) => {
+  const xDistance = Math.abs(tail.x - head.x);
+  const yDistance = Math.abs(tail.y - head.y);
   if (xDistance <= 1 && yDistance <= 1) {
-    return tailPosition;
+    return tail;
   }
-  if (tailPosition.x > headPosition.x) {
-    tailPosition.x--;
+  if (tail.x > head.x) {
+    tail.x--;
   }
-  if (tailPosition.x < headPosition.x) {
-    tailPosition.x++;
+  if (tail.x < head.x) {
+    tail.x++;
   }
-  if (tailPosition.y > headPosition.y) {
-    tailPosition.y--;
+  if (tail.y > head.y) {
+    tail.y--;
   }
-  if (tailPosition.y < headPosition.y) {
-    tailPosition.y++;
+  if (tail.y < head.y) {
+    tail.y++;
   }
-  return tailPosition;
+  return tail;
 };
