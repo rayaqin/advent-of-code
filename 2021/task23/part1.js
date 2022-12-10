@@ -1,13 +1,13 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
   alert("The File APIs are not fully supported in this browser. The code won't work.");
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,36 +16,73 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let sideRoomCount = 0;
-  let caveData = source.split('\n').map((line) =>
-    line.split('').map((spot) => {
-      if (spot === '.') {
+  let amphipodEncounters = 0;
+
+  const encounterToRoomMap = {
+    1: "A",
+    2: "B",
+    3: "C",
+    4: "D",
+  };
+
+  const xToRoomMap = {};
+  let caveData = source.split("\r\n").map((line, y) =>
+    line.split("").map((spot, x) => {
+      if (spot === "#" || spot === " ") {
         return {
-          type: 'hallway',
-          occupiedBy: spot,
+          type: "wall",
+          occupant: null,
+          x,
+          y,
+          room: null,
+          isDoorway: false,
+          locked: true,
         };
       }
-      if (!!spot.match(/[A-Z]/)) {
-        let spotObject = {
-          type: 'sideRoom',
-          sideRoomId: sideRoomCount,
-          occupiedBy: spot,
+      let amphipod = null;
+      if (!!spot.match(/[A-Z]/g)) {
+        amphipod = {
+          type: spot,
+          id: `${x},${y}`,
         };
-        sideRoomCount++;
-        if (sideRoomCount === 4) sideRoomCount = 0;
-        return spotObject;
+        if (amphipodEncounters < Object.keys(encounterToRoomMap).length) {
+          amphipodEncounters++;
+          xToRoomMap[x] = encounterToRoomMap[amphipodEncounters];
+        }
       }
+      return {
+        type: "floor",
+        occupant: amphipod,
+        x,
+        y,
+        room: amphipod ? xToRoomMap[x] : null,
+        isDoorway: false,
+        locked: false,
+      };
     })
   );
+
+  for (let x = 0; x < caveData[0].length; x++) {
+    for (let y = 0; y + 1 < Object.keys(caveData[0][0]).length; y++) {
+      if (
+        caveData[y][x] &&
+        caveData[y][x].type === "floor" &&
+        caveData[y][x].occupant === null &&
+        !!caveData[y + 1][x].occupant
+      ) {
+        caveData[y][x].isDoorway = true;
+      }
+    }
+  }
   console.log(caveData);
 };
 

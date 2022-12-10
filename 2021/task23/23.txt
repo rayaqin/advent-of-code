@@ -13,7 +13,7 @@
 Amphipod:
 {
   type: 'A' | 'B' | 'C' | 'D',
-  id: 1 | 2 | 3 | 4,
+  id: `${x},${y}`,
 }
 
 Tile:
