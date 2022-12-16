@@ -64,6 +64,7 @@ const comparePackets = (leftPacketString, rightPacketString) => {
 const validatePackets = (leftPacketString, rightPacketString) => {
   let i = 0;
   let j = 0;
+  debugger;
   leftPacketString = leftPacketString.slice(1, leftPacketString.length - 1);
   rightPacketString = rightPacketString.slice(1, rightPacketString.length - 1);
   while (true) {
