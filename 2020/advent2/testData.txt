@@ -1,0 +1,13 @@
+1-3 a: abcde
+1-3 b: cdefg
+2-9 c: ccccccccc
+12-14 n: nnnnnnnnnnnnnn
+6-11 h: hhhhhqhhhhhvhhhh
+2-12 f: fgfrpzcstfffffxff
+2-12 n: nnxmnmnnnnknrpmnv
+6-7 m: jmmmmcnpkm
+4-6 v: mvkcwvmvvjvrvlv
+18-20 h: hhrmbrhhhhlhhvhmhhhb
+9-13 g: ggggggzgggsgfgxg
+9-15 m: pmmxmmmmmmmmmmm
+19-190 c: cccsdre56b4escccc#@{}Đ[đÄcs564sbwcccc346bw4cccccccc
