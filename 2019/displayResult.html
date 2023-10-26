@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AdventOfCode2021</title>
-    <link rel="stylesheet" href="./displayStyles.css" />
-  </head>
-  <body>
-    <div id="background">
-      <div id="button-section">
-        <div id="input-wrapper">
-          <label for="choose-file" id="input-label">
-            select source file
-            <input type="file" id="choose-file" />
-          </label>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AdventOfCode2019</title>
+        <link rel="stylesheet" href="./displayStyles.css" />
+    </head>
+    <body>
+        <div id="background">
+            <div id="button-section">
+                <div id="input-wrapper">
+                    <label for="choose-file" id="input-label">
+                        select source file
+                        <input type="file" id="choose-file" />
+                    </label>
+                </div>
+                <div id="part-selection">
+                    <button onclick="solveSelectedPart(1)">I</button>
+                    <button onclick="solveSelectedPart(2)">II</button>
+                </div>
+            </div>
+            <div id="message-to-user" class="invisible"></div>
         </div>
-        <div id="part-selection">
-          <button onclick="solveSelectedPart(1)">I</button>
-          <button onclick="solveSelectedPart(2)">II</button>
-        </div>
-      </div>
-      <div id="message-to-user" class="invisible"></div>
-    </div>
-  </body>
-  <script src="./task3/solution2.js"></script>
+    </body>
+    <script src="./task1/solution.js"></script>
 </html>
