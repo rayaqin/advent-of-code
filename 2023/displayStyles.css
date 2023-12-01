@@ -1,0 +1,115 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  min-height: 460px;
+  width: 100vw;
+  overflow: hidden;
+  font-family: "Roboto";
+  letter-spacing: 2px;
+}
+
+#background {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgb(18, 29, 18);
+}
+
+#input-wrapper {
+  transition: all 0.2s ease-in-out;
+}
+
+#input-wrapper:hover {
+  transform: scale(1.02);
+}
+
+#input-label {
+  cursor: pointer;
+  background-color: rgb(53, 92, 53);
+  color: white;
+  padding: 12px 18px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  font-size: 32px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 6px;
+}
+
+#input-label:hover {
+  background-color: rgb(63, 148, 63);
+}
+
+#part-selection {
+  width: 100%;
+  display: flex;
+  visibility: hidden;
+  justify-content: space-between;
+}
+
+#part-selection > button {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: rgb(53, 92, 53);
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: all 0.3s ease-in-out;
+  padding: 12px 56px;
+  font-size: 18px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 6px;
+}
+
+#part-selection > button:hover {
+  transform: scale(1.04);
+  background-color: rgb(63, 148, 63);
+}
+
+#message-to-user {
+  color: rgb(79, 121, 79);
+  min-height: 18px;
+  margin-top: 24px;
+  transition: opacity 2s ease-in-out;
+}
+
+.invisible {
+  color: rgb(18, 29, 18) !important;
+  opacity: 0;
+}
+
+input[type="file"] {
+  position: absolute;
+  left: -9999px;
+}
+input[type="file"] {
+  position: absolute;
+  left: -9999px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(31, 143, 20);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(84, 175, 44);
+}
