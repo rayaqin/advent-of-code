@@ -50,6 +50,7 @@ const getSolutionForPart1 = (source) => {
 
 const getSolutionForPart2 = (source) => {
 
+  // to avoid 'eightwo' and `twone` causing problems
   const textToNumMap = {
     "one": 'o1e',
     "two": 't2o',
@@ -65,7 +66,9 @@ const getSolutionForPart2 = (source) => {
   return source
     .split("\r\n")
     .map(line => {
-      let parsedLine = line
+      let parsedLine = line;
+
+      // replace written numbers with easily detectable aliases
       Object.keys(textToNumMap).forEach((numText) => {
         parsedLine = parsedLine.replaceAll(numText, textToNumMap[numText]);
       })
