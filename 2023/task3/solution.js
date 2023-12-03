@@ -84,7 +84,7 @@ const getSolutionForPart2 = (source) => {
     }
   }
 
-  // set partNumbers for all stars
+  // set partNumbers for all stars based on adjacency
   for (let currentStar of starMap.values()) {
     for (let currentNum of numDataMap.values()) {
       if (isInVicinity(currentStar, currentNum)) {
@@ -106,8 +106,8 @@ const getSolutionForPart2 = (source) => {
 };
 
 /*
-  From the start index of the number, the line the number is in, and the index of the
-  line in the matrix, this function searches for the end of the number within the line
+  From the index of the line in the matrix (x), the start index of the number (y),
+  and the line the number is in (line), this function searches for the end of the number within the line,
   and then returns an object with all the information.
 */
 const getNumData = (x, y, line) => {
@@ -127,8 +127,8 @@ const getNumData = (x, y, line) => {
 }
 
 /*
-  Based on the number's length and position within the line, this
-  function returns a submatrix of the fullmatrix, that contains
+  Based on the number's length, and it's position within the line, this
+  function returns a submatrix of the full matrix, that contains
   the fields right next to the number in all directions.
 */
 const getNumAdjacentMatrix = (fullMatrix, startIndexX, startIndexY, length) => {
