@@ -25,7 +25,8 @@ chooseFile.addEventListener('change', handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let nodesMatrix = source.split('\n').map((line) => line.split('').map((char) => parseInt(char))); // expand this 5 times both directions
+  let nodesMatrix = source.split('\n').map((line) => line.split('').map((char) => parseInt(char)));
+  // expand 5 times both directions
   let extendedMatrixOfNodes = Array.from(Array(nodesMatrix.length * 5), () => Array.from(Array(nodesMatrix[0].length * 5)));
   for (let x = 0; x < extendedMatrixOfNodes.length; x++) {
     for (let y = 0; y < extendedMatrixOfNodes[x].length; y++) {
@@ -100,7 +101,7 @@ const mutateNodeValue = (value, repeat) => {
   return result;
 };
 
-/* 
+/*
 Basic Dijkstra
 Mark all nodes unvisited. Create a set of all the unvisited nodes called the unvisited set. - done
 
