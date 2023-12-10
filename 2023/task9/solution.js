@@ -45,7 +45,7 @@ const getSolutionForPart1 = (source) => {
   return source.split('\r\n')
     .map(line => line.match(/-?\d+/g).map(Number))
     .map(numArray => getNextNumber(numArray, []))
-    .reduce((a, b) => a + b)
+    .reduce((acc, currNextNum) => acc + currNextNum)
 };
 
 
@@ -53,8 +53,8 @@ const getSolutionForPart2 = (source) => {
   return source.split('\r\n')
     .map(line => line.match(/-?\d+/g).map(Number))
     .map(numArray => getPreviousNumber(numArray, []))
-    .reduce((a, b) => a + b)
-}
+    .reduce((acc, currPrevNum) => acc + currPrevNum)
+};
 
 const getNextNumber = (numArray, ends) => {
   if (numArray.length === 0 || numArray.every(a => a === 0)) {
@@ -62,12 +62,11 @@ const getNextNumber = (numArray, ends) => {
   }
   let diffs = [];
   for (let i = 0; i < numArray.length - 1; i++) {
-    // bs
     diffs.push(numArray[i + 1] - numArray[i]);
   }
   ends.push(numArray[numArray.length - 1]);
   return getNextNumber(diffs, ends);
-}
+};
 
 const getPreviousNumber = (numArray, starts) => {
   if (numArray.length === 0 || numArray.every(a => a === 0)) {
@@ -75,11 +74,10 @@ const getPreviousNumber = (numArray, starts) => {
   }
   let diffs = [];
   for (let i = 0; i < numArray.length - 1; i++) {
-    // bs
     diffs.push(numArray[i + 1] - numArray[i]);
   }
   starts.push(numArray[0]);
 
   return getPreviousNumber(diffs, starts);
-}
+};
 
