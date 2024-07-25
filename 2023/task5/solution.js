@@ -127,7 +127,7 @@ const getSolutionForPart2 = (source) => {
 // gets the mapped value from the source value
 const getMappedValue = (value, ranges) => {
   for (let range of ranges) {
-    if (value <= (range.source + range.length) && value >= range.source) {
+    if (value < (range.source + range.length) && value >= range.source) {
       return range.dest + (value - range.source);
     }
   }
@@ -137,7 +137,7 @@ const getMappedValue = (value, ranges) => {
 // gets the source value from the mapped value
 const getSourceValue = (mappedValue, ranges) => {
   for (let range of ranges) {
-    if (mappedValue <= (range.dest + range.length) && mappedValue >= range.dest) {
+    if (mappedValue < (range.dest + range.length) && mappedValue >= range.dest) {
       return range.source + (mappedValue - range.dest);
     }
   }
@@ -145,7 +145,7 @@ const getSourceValue = (mappedValue, ranges) => {
 }
 
 const isNumberWithinAnySeedRanges = (number, seedRanges) => {
-  return seedRanges.reduce((isWithinRange, range) => (number >= range.from && number <= range.to) || isWithinRange, false);
+  return seedRanges.some(range => number >= range.from && number <= range.to);
 }
 
 
