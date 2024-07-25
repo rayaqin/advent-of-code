@@ -118,7 +118,7 @@ const getSolutionForPart2 = (source) => {
     // to occupy the user
     if (locationValue % 10000000 === 0) {
       const end = performance.now();
-      console.log("loc-", locationValue, "time elapsed: ", Math.round(end - start) + "ms");
+      console.log("Checked location value: ", locationValue, "time elapsed: ", Math.round(end - start) + "ms");
     }
   }
 
