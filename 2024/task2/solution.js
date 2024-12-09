@@ -46,9 +46,68 @@ const solveSelectedPart = (partId) => {
   console.log(`Solution for part ${partId}:`, solution);
 };
 
+const isLineSafe = (levels) => {
+  if(levels.length <= 1) return true;
+
+  let shouldIncrease = false;
+  let shouldDecrease = false;
+  for(let i = 1; i < levels.length; i++) {
+    const diff = levels[i] - levels[i-1];
+    if(!shouldIncrease && !shouldDecrease){
+      shouldIncrease = diff >= 1;
+      shouldDecrease = diff <= -1;
+    }
+    if(shouldIncrease && diff < 1) return false;
+    if(shouldDecrease && diff > -1) return false;
+    if(Math.abs(diff) < 1 || Math.abs(diff) > 3) return false;
+  }
+  return true;
+}
+
+const isLineSafeWithDampener = (levels) => {
+  // console.log("levels being checked: ", levels);
+  if (levels.length <= 1) return true;
+
+
+  let isProblematic = false;
+  let shouldIncrease = false;
+  let shouldDecrease = false;
+
+  for (let i = 1; i < levels.length; i++) {
+    const diff = levels[i] - levels[i - 1];
+    if (!shouldIncrease && !shouldDecrease) {
+      shouldIncrease = diff >= 1;
+      shouldDecrease = diff <= -1;
+    }
+    if (
+      (shouldIncrease && diff < 1) ||
+      (shouldDecrease && diff > -1) ||
+      Math.abs(diff) < 1 ||
+      Math.abs(diff) > 3
+    ) {
+      isProblematic = true;
+    }
+  }
+
+  if(!isProblematic) return true;
+
+  for (let i = 0; i < levels.length; i++) {
+    const levelsWithoutProblematicAtIndex = levels.toSpliced(i, 1);
+    // console.log("correction attempt, levels being checked: ", levelsWithoutProblematicAtIndex);
+
+    if (isLineSafe(levelsWithoutProblematicAtIndex)) {
+      // console.log("safe after removing: ", levels[i]);
+      return true;
+    }
+  }
+  // console.log("no fix was possible");
+
+  return false;
+}
+
 const getSolutionForPart1 = (source) => {
-  
+  return source.split("\n").map(line => isLineSafe(line.split(' ').map(Number))).reduce((acc,curr) => acc + (Boolean(curr) ? 1 : 0));
 };
 const getSolutionForPart2 = (source) => {
-  
+  return source.split("\n").map(line => isLineSafeWithDampener(line.split(' ').map(Number))).reduce((acc,curr) => acc + (Boolean(curr) ? 1 : 0));
 };
