@@ -86,9 +86,9 @@ const getSolutionForPart2 = (source) => {
     )
     .reduce(
       (dialData, rotationDistance) => {
-        console.log("zeroVisitCount before: ", dialData.zeroVisitCount);
-        console.log("dialPosition before: ", dialData.dialPosition);
-        console.log("rotation required: ", rotationDistance);
+        // console.log("zeroVisitCount before: ", dialData.zeroVisitCount);
+        // console.log("dialPosition before: ", dialData.dialPosition);
+        // console.log("rotation required: ", rotationDistance);
 
         const dialChangeFromZero = getDialChangeFromZero({
           currentDialPosition: dialData.dialPosition,
@@ -103,7 +103,7 @@ const getSolutionForPart2 = (source) => {
           dialLength: dialLength,
         });
 
-        console.log("dialPosition after: ", dialData.dialPosition);
+        // console.log("dialPosition after: ", dialData.dialPosition);
 
         dialData.zeroVisitCount += getZeroCrosses({
           previousDialPosition: previousDialPosition,
@@ -111,8 +111,8 @@ const getSolutionForPart2 = (source) => {
           dialLength: dialLength,
           newDialPosition: dialData.dialPosition,
         });
-        console.log("zeroVisitCount after: ", dialData.zeroVisitCount);
-        console.log("------------------------------");
+        // console.log("zeroVisitCount after: ", dialData.zeroVisitCount);
+        // console.log("------------------------------");
         return dialData;
       },
       { dialPosition: 50, zeroVisitCount: 0 }
