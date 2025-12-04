@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,9 +39,13 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
-  partId === 2 && console.log("Zoom out in console to see the levels of the cave properly");
+  partId === 2 &&
+    console.log("Zoom out in console to see the levels of the cave properly");
 };
 
 const getSolutionForPart1 = (source) => {
@@ -144,25 +151,41 @@ const parseLinesIntoMap = (source, caveMap) => {
     for (let i = 0; i < points.length - 1; i++) {
       if (points[i].x <= points[i + 1].x) {
         // draw line from current point's x to the next point's x (to the right)
-        for (let currentX = points[i].x; currentX <= points[i + 1].x; currentX++) {
+        for (
+          let currentX = points[i].x;
+          currentX <= points[i + 1].x;
+          currentX++
+        ) {
           caveMap.set(`${currentX},${points[i].y}`, "#");
         }
       }
       if (points[i].x >= points[i + 1].x) {
         // draw line from current point's x to the next point's x (to the left)
-        for (let currentX = points[i].x; currentX >= points[i + 1].x; currentX--) {
+        for (
+          let currentX = points[i].x;
+          currentX >= points[i + 1].x;
+          currentX--
+        ) {
           caveMap.set(`${currentX},${points[i].y}`, "#");
         }
       }
       if (points[i].y <= points[i + 1].y) {
         // draw line from current point's y to the next point's y (downwards)
-        for (let currentY = points[i].y; currentY <= points[i + 1].y; currentY++) {
+        for (
+          let currentY = points[i].y;
+          currentY <= points[i + 1].y;
+          currentY++
+        ) {
           caveMap.set(`${points[i].x},${currentY}`, "#");
         }
       }
       if (points[i].y >= points[i + 1].y) {
         // draw line from current point's y to the next point's y (upwards)
-        for (let currentY = points[i].y; currentY >= points[i + 1].y; currentY--) {
+        for (
+          let currentY = points[i].y;
+          currentY >= points[i + 1].y;
+          currentY--
+        ) {
           caveMap.set(`${points[i].x},${currentY}`, "#");
         }
       }
@@ -180,7 +203,11 @@ const drawMap = (caveMap) => {
 
     let line = `${neededZeroes}${depth}: `;
 
-    for (let width = caveMap.get("startWidth"); width <= caveMap.get("width"); width++) {
+    for (
+      let width = caveMap.get("startWidth");
+      width <= caveMap.get("width");
+      width++
+    ) {
       line = line + (caveMap.get(`${width},${depth}`) || ".");
     }
     console.log(line + "\r\n");

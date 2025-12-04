@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,7 +39,10 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
@@ -64,7 +70,7 @@ const getSolutionForPart1 = (source) => {
         distanceFromStart: Infinity,
         visited: false,
       });
-    })
+    }),
   );
 
   // set neighbours that can be stepped to
@@ -72,16 +78,32 @@ const getSolutionForPart1 = (source) => {
     for (let x = 0; x < topologyWidth; x++) {
       const currentNode = topologyMap.get(`${x},${y}`);
       const currentNodeCharcode = currentNode.value.charCodeAt(0);
-      if (y !== 0 && topologyMap.get(`${x},${y - 1}`).value.charCodeAt(0) <= currentNodeCharcode + 1) {
+      if (
+        y !== 0 &&
+        topologyMap.get(`${x},${y - 1}`).value.charCodeAt(0) <=
+          currentNodeCharcode + 1
+      ) {
         currentNode.neighbours.push(`${x},${y - 1}`);
       }
-      if (y !== topologyHeight - 1 && topologyMap.get(`${x},${y + 1}`).value.charCodeAt(0) <= currentNodeCharcode + 1) {
+      if (
+        y !== topologyHeight - 1 &&
+        topologyMap.get(`${x},${y + 1}`).value.charCodeAt(0) <=
+          currentNodeCharcode + 1
+      ) {
         currentNode.neighbours.push(`${x},${y + 1}`);
       }
-      if (x !== 0 && topologyMap.get(`${x - 1},${y}`).value.charCodeAt(0) <= currentNodeCharcode + 1) {
+      if (
+        x !== 0 &&
+        topologyMap.get(`${x - 1},${y}`).value.charCodeAt(0) <=
+          currentNodeCharcode + 1
+      ) {
         currentNode.neighbours.push(`${x - 1},${y}`);
       }
-      if (x !== topologyWidth - 1 && topologyMap.get(`${x + 1},${y}`).value.charCodeAt(0) <= currentNodeCharcode + 1) {
+      if (
+        x !== topologyWidth - 1 &&
+        topologyMap.get(`${x + 1},${y}`).value.charCodeAt(0) <=
+          currentNodeCharcode + 1
+      ) {
         currentNode.neighbours.push(`${x + 1},${y}`);
       }
     }
@@ -113,7 +135,7 @@ const getSolutionForPart2 = (source) => {
         distanceFromStart: Infinity,
         visited: false,
       });
-    })
+    }),
   );
 
   // set neighbours that can be stepped to
@@ -121,36 +143,71 @@ const getSolutionForPart2 = (source) => {
     for (let x = 0; x < topologyWidth; x++) {
       const currentNode = topologyMap.get(`${x},${y}`);
       const currentNodeCharcode = currentNode.value.charCodeAt(0);
-      if (y !== 0 && topologyMap.get(`${x},${y - 1}`).value.charCodeAt(0) >= currentNodeCharcode - 1) {
+      if (
+        y !== 0 &&
+        topologyMap.get(`${x},${y - 1}`).value.charCodeAt(0) >=
+          currentNodeCharcode - 1
+      ) {
         currentNode.neighbours.push(`${x},${y - 1}`);
       }
-      if (y !== topologyHeight - 1 && topologyMap.get(`${x},${y + 1}`).value.charCodeAt(0) >= currentNodeCharcode - 1) {
+      if (
+        y !== topologyHeight - 1 &&
+        topologyMap.get(`${x},${y + 1}`).value.charCodeAt(0) >=
+          currentNodeCharcode - 1
+      ) {
         currentNode.neighbours.push(`${x},${y + 1}`);
       }
-      if (x !== 0 && topologyMap.get(`${x - 1},${y}`).value.charCodeAt(0) >= currentNodeCharcode - 1) {
+      if (
+        x !== 0 &&
+        topologyMap.get(`${x - 1},${y}`).value.charCodeAt(0) >=
+          currentNodeCharcode - 1
+      ) {
         currentNode.neighbours.push(`${x - 1},${y}`);
       }
-      if (x !== topologyWidth - 1 && topologyMap.get(`${x + 1},${y}`).value.charCodeAt(0) >= currentNodeCharcode - 1) {
+      if (
+        x !== topologyWidth - 1 &&
+        topologyMap.get(`${x + 1},${y}`).value.charCodeAt(0) >=
+          currentNodeCharcode - 1
+      ) {
         currentNode.neighbours.push(`${x + 1},${y}`);
       }
     }
   }
-  return getShortestPath(topologyMap, startCoordinates, destinationCoordinates, true);
+  return getShortestPath(
+    topologyMap,
+    startCoordinates,
+    destinationCoordinates,
+    true,
+  );
 };
 
 //Dijkstra
-const getShortestPath = (nodeMap, startCoordinates, destinationCoordinates, findShortestA) => {
+const getShortestPath = (
+  nodeMap,
+  startCoordinates,
+  destinationCoordinates,
+  findShortestA,
+) => {
   let unvisitedNodeKeys = new Set(nodeMap.keys());
   nodeMap.get(startCoordinates).distanceFromStart = 0;
   let minimalStepsToA = Infinity;
-  let currentNodeKey = returnSmallestDistanceNodeKey(unvisitedNodeKeys, nodeMap);
-  while (destinationCoordinates !== currentNodeKey && nodeMap.get(destinationCoordinates).visited === false) {
+  let currentNodeKey = returnSmallestDistanceNodeKey(
+    unvisitedNodeKeys,
+    nodeMap,
+  );
+  while (
+    destinationCoordinates !== currentNodeKey &&
+    nodeMap.get(destinationCoordinates).visited === false
+  ) {
     nodeMap.get(currentNodeKey).neighbours.forEach((neighbour) => {
       if (unvisitedNodeKeys.has(neighbour)) {
         let currentDistance = nodeMap.get(currentNodeKey).distanceFromStart;
         let purposedNewDistance = currentDistance + 1;
         let oldNeighbourDistance = nodeMap.get(neighbour).distanceFromStart;
-        nodeMap.get(neighbour).distanceFromStart = Math.min(oldNeighbourDistance, purposedNewDistance);
+        nodeMap.get(neighbour).distanceFromStart = Math.min(
+          oldNeighbourDistance,
+          purposedNewDistance,
+        );
       }
     });
     nodeMap.get(currentNodeKey).visited = true;
@@ -158,7 +215,10 @@ const getShortestPath = (nodeMap, startCoordinates, destinationCoordinates, find
     currentNodeKey = returnSmallestDistanceNodeKey(unvisitedNodeKeys, nodeMap);
 
     if (findShortestA && nodeMap.get(currentNodeKey).value === "a") {
-      minimalStepsToA = Math.min(minimalStepsToA, nodeMap.get(currentNodeKey).distanceFromStart);
+      minimalStepsToA = Math.min(
+        minimalStepsToA,
+        nodeMap.get(currentNodeKey).distanceFromStart,
+      );
     }
   }
 
@@ -174,7 +234,8 @@ const returnSmallestDistanceNodeKey = (univisitedKeys, nodeMap) => {
   univisitedKeys.forEach((coordinate) => {
     if (
       !nodeMap.get(smallestDistanceNodeKey) ||
-      nodeMap.get(smallestDistanceNodeKey).distanceFromStart > nodeMap.get(coordinate).distanceFromStart
+      nodeMap.get(smallestDistanceNodeKey).distanceFromStart >
+        nodeMap.get(coordinate).distanceFromStart
     ) {
       smallestDistanceNodeKey = coordinate;
     }

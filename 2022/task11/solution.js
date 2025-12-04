@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,7 +39,10 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
@@ -71,10 +77,13 @@ const fillMonkeyMap = (source, monkeyMap) => {
       startingItems: lines[1].match(/\d+/g).map((n) => parseInt(n)),
       inspectionEffect: (old) => {
         const rightSide = lines[2].match(/(?<=\s[\+\*]\s)(old|\d+)/g)[0];
-        const currentRightValue = rightSide === "old" ? old : parseInt(rightSide);
+        const currentRightValue =
+          rightSide === "old" ? old : parseInt(rightSide);
         const multiplication = !!(lines[2].indexOf("*") >= 0);
 
-        const newWorryLevelRaw = multiplication ? old * currentRightValue : old + currentRightValue;
+        const newWorryLevelRaw = multiplication
+          ? old * currentRightValue
+          : old + currentRightValue;
 
         return newWorryLevelRaw % primeProduct;
       },
@@ -91,23 +100,33 @@ const fillMonkeyMap = (source, monkeyMap) => {
   });
 
   Object.keys(monkeyMap).forEach((monkey) => {
-    monkeyMap[monkey].trueDestinationMonkey = monkeyMap[monkeyMap[monkey].trueDestinationMonkey];
-    monkeyMap[monkey].falseDestinationMonkey = monkeyMap[monkeyMap[monkey].falseDestinationMonkey];
+    monkeyMap[monkey].trueDestinationMonkey =
+      monkeyMap[monkeyMap[monkey].trueDestinationMonkey];
+    monkeyMap[monkey].falseDestinationMonkey =
+      monkeyMap[monkeyMap[monkey].falseDestinationMonkey];
   });
 };
 
 const relief = (worryLevel) => Math.floor(worryLevel / 3);
 
-const executeRoundsGetMonkeyBusiness = (monkeyMap, numberOfRounds, reliefUponInspection) => {
+const executeRoundsGetMonkeyBusiness = (
+  monkeyMap,
+  numberOfRounds,
+  reliefUponInspection,
+) => {
   for (let i = 0; i < numberOfRounds; i++) {
     for (key of Object.keys(monkeyMap)) {
       const currentMonkey = monkeyMap[key];
       const numberOfStartingItems = currentMonkey.startingItems.length;
 
       for (let j = 0; j < numberOfStartingItems; j++) {
-        const worryLevelAfterInspection = currentMonkey.inspectionEffect(currentMonkey.startingItems.shift());
+        const worryLevelAfterInspection = currentMonkey.inspectionEffect(
+          currentMonkey.startingItems.shift(),
+        );
 
-        const newWorryLevel = reliefUponInspection ? relief(worryLevelAfterInspection) : worryLevelAfterInspection;
+        const newWorryLevel = reliefUponInspection
+          ? relief(worryLevelAfterInspection)
+          : worryLevelAfterInspection;
 
         currentMonkey.inspectionCount++;
 

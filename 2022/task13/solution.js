@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,21 +39,38 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
 const getSolutionForPart1 = (source) => {
   return source
     .split("\r\n\r\n")
-    .map((pair) => validatePackets(pair.split("\r\n")[0], pair.split("\r\n")[1]))
-    .reduce((acc, curr, index) => (curr === "valid" || curr === "continue" ? acc + index + 1 : acc), 0);
+    .map((pair) =>
+      validatePackets(pair.split("\r\n")[0], pair.split("\r\n")[1]),
+    )
+    .reduce(
+      (acc, curr, index) =>
+        curr === "valid" || curr === "continue" ? acc + index + 1 : acc,
+      0,
+    );
 };
 
 const getSolutionForPart2 = (source) => {
-  return [...source.split("\r\n").filter((packet) => packet !== ""), "[[2]]", "[[6]]"]
+  return [
+    ...source.split("\r\n").filter((packet) => packet !== ""),
+    "[[2]]",
+    "[[6]]",
+  ]
     .sort(comparePackets)
-    .reduce((acc, curr, index) => (curr === "[[2]]" || curr === "[[6]]" ? acc * (index + 1) : acc * 1), 1);
+    .reduce(
+      (acc, curr, index) =>
+        curr === "[[2]]" || curr === "[[6]]" ? acc * (index + 1) : acc * 1,
+      1,
+    );
 };
 
 const comparePackets = (leftPacketString, rightPacketString) => {
@@ -112,8 +132,14 @@ const validatePackets = (leftPacketString, rightPacketString) => {
       }
     }
     if (leftValue === "[" || rightValue === "[") {
-      const leftList = leftValue.length > 1 ? `[${leftValue}]` : sliceNextListFromString(leftPacketString.slice(i));
-      const rightList = rightValue.length > 1 ? `[${rightValue}]` : sliceNextListFromString(rightPacketString.slice(j));
+      const leftList =
+        leftValue.length > 1
+          ? `[${leftValue}]`
+          : sliceNextListFromString(leftPacketString.slice(i));
+      const rightList =
+        rightValue.length > 1
+          ? `[${rightValue}]`
+          : sliceNextListFromString(rightPacketString.slice(j));
       const subPacketValidity = validatePackets(leftList, rightList);
       if (subPacketValidity === "continue") {
         i += leftValue === "[" ? leftList.length : 1; // jump to after end of list

@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,16 +39,27 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
 const getSolutionForPart1 = (source) => {
-  return source.split('\r\n').map(line => getFuelConsumptionFromMass(parseInt(line))).reduce((acc, curr) => acc + curr, 0);
+  return source
+    .split("\r\n")
+    .map((line) => getFuelConsumptionFromMass(parseInt(line)))
+    .reduce((acc, curr) => acc + curr, 0);
 };
 
 const getSolutionForPart2 = (source) => {
-  return source.split('\r\n').map(line => getAllFuelFromFuel(getFuelConsumptionFromMass(parseInt(line)))).reduce((acc, curr) => acc + curr, 0);
+  return source
+    .split("\r\n")
+    .map((line) =>
+      getAllFuelFromFuel(getFuelConsumptionFromMass(parseInt(line))),
+    )
+    .reduce((acc, curr) => acc + curr, 0);
 };
 
 const getAllFuelFromFuel = (fuelMass) => {
@@ -60,5 +74,4 @@ const getAllFuelFromFuel = (fuelMass) => {
 
 const getFuelConsumptionFromMass = (mass) => {
   return Math.floor(mass / 3) - 2;
-}
-
+};

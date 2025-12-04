@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,25 +18,42 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  const commands = source.split('\n').map((line) => {
-    let ranges = line.split(' ')[1].split(',');
-    let x = { from: ranges[0].match(/(?<=[=])-?[0-9]+/)[0], to: ranges[0].match(/(?<=[.])-?[0-9]+/)[0] };
-    let y = { from: ranges[1].match(/(?<=[=])-?[0-9]+/)[0], to: ranges[1].match(/(?<=[.])-?[0-9]+/)[0] };
-    let z = { from: ranges[2].match(/(?<=[=])-?[0-9]+/)[0], to: ranges[2].match(/(?<=[.])-?[0-9]+/)[0] };
+  const commands = source.split("\n").map((line) => {
+    let ranges = line.split(" ")[1].split(",");
+    let x = {
+      from: ranges[0].match(/(?<=[=])-?[0-9]+/)[0],
+      to: ranges[0].match(/(?<=[.])-?[0-9]+/)[0],
+    };
+    let y = {
+      from: ranges[1].match(/(?<=[=])-?[0-9]+/)[0],
+      to: ranges[1].match(/(?<=[.])-?[0-9]+/)[0],
+    };
+    let z = {
+      from: ranges[2].match(/(?<=[=])-?[0-9]+/)[0],
+      to: ranges[2].match(/(?<=[.])-?[0-9]+/)[0],
+    };
 
     return {
-      commandType: line.split(' ')[0],
-      minPoint: { x: parseInt(x.from), y: parseInt(y.from), z: parseInt(z.from) },
-      maxPoint: { x: parseInt(x.to), y: parseInt(y.to), z: parseInt(z.to) },
+      commandType: line.split(" ")[0],
+      minPoint: {
+        x: parseInt(x.from),
+        y: parseInt(y.from),
+        z: parseInt(z.from),
+      },
+      maxPoint: {
+        x: parseInt(x.to),
+        y: parseInt(y.to),
+        z: parseInt(z.to),
+      },
     };
   });
 
@@ -42,17 +61,28 @@ const solution = (source) => {
 
   commands.forEach((commandCuboid) => {
     if (resultCuboidsWithMatrixes.length === 0) {
-      resultCuboidsWithMatrixes.push(addFilledMatrixToCuboidData(commandCuboid, commandCuboid.commandType == 'on' ? 1 : 0));
+      resultCuboidsWithMatrixes.push(
+        addFilledMatrixToCuboidData(
+          commandCuboid,
+          commandCuboid.commandType == "on" ? 1 : 0,
+        ),
+      );
     } else {
       resultCuboidsWithMatrixes.forEach((existingCuboid, index) => {
         if (checkIfTwoCuboidDataIntersect(existingCuboid, commandCuboid)) {
-          resultCuboidsWithMatrixes.push(getEngulfingCuboidWithMatrix(existingCuboid, commandCuboid));
+          resultCuboidsWithMatrixes.push(
+            getEngulfingCuboidWithMatrix(existingCuboid, commandCuboid),
+          );
           resultCuboidsWithMatrixes[index] = null;
-        } else if (commandCuboid.commandType === 'on') {
-          resultCuboidsWithMatrixes.push(addFilledMatrixToCuboidData(commandCuboid, 1));
+        } else if (commandCuboid.commandType === "on") {
+          resultCuboidsWithMatrixes.push(
+            addFilledMatrixToCuboidData(commandCuboid, 1),
+          );
         }
       });
-      resultCuboidsWithMatrixes = resultCuboidsWithMatrixes.filter((a) => a !== null);
+      resultCuboidsWithMatrixes = resultCuboidsWithMatrixes.filter(
+        (a) => a !== null,
+      );
     }
   });
 
@@ -97,7 +127,9 @@ const createMatrixFromCuboidData = (cuboidData, fillValue) => {
     for (let y = 0; y <= cuboidData.maxPoint.y - cuboidData.minPoint.y; y++) {
       matrix[x] ? matrix[x].push([]) : (matrix[x] = []);
       for (let z = 0; z <= cuboidData.maxPoint.z - cuboidData.minPoint.z; z++) {
-        matrix[x][y] ? matrix[x][y].push(fillValue) : (matrix[x][y] = [fillValue]);
+        matrix[x][y]
+          ? matrix[x][y].push(fillValue)
+          : (matrix[x][y] = [fillValue]);
       }
     }
   }
@@ -105,8 +137,14 @@ const createMatrixFromCuboidData = (cuboidData, fillValue) => {
 };
 
 const getEngulfingCuboidWithMatrix = (existingCuboid, commandCuboid) => {
-  let newEngulfingCuboidData = getEngulfingCuboidMinMax(existingCuboid, commandCuboid);
-  newEngulfingCuboidData.matrix = createMatrixFromCuboidData(newEngulfingCuboidData, 0);
+  let newEngulfingCuboidData = getEngulfingCuboidMinMax(
+    existingCuboid,
+    commandCuboid,
+  );
+  newEngulfingCuboidData.matrix = createMatrixFromCuboidData(
+    newEngulfingCuboidData,
+    0,
+  );
   overWriteBigMatrixValuesWithSmall(newEngulfingCuboidData, existingCuboid);
   overWriteBigMatrixValuesWithSmall(newEngulfingCuboidData, commandCuboid);
   return newEngulfingCuboidData;
@@ -126,10 +164,16 @@ const overWriteBigMatrixValuesWithSmall = (big, small) => {
           z <= small.maxPoint.z
         ) {
           if (small.matrix) {
-            big.matrix[x - big.minPoint.x][y - big.minPoint.y][z - big.minPoint.z] =
-              small.matrix[x - small.minPoint.x][y - small.minPoint.y][z - small.minPoint.z];
+            big.matrix[x - big.minPoint.x][y - big.minPoint.y][
+              z - big.minPoint.z
+            ] =
+              small.matrix[x - small.minPoint.x][y - small.minPoint.y][
+                z - small.minPoint.z
+              ];
           } else {
-            big.matrix[x - big.minPoint.x][y - big.minPoint.y][z - big.minPoint.z] = small.commandType == 'on' ? 1 : 0;
+            big.matrix[x - big.minPoint.x][y - big.minPoint.y][
+              z - big.minPoint.z
+            ] = small.commandType == "on" ? 1 : 0;
           }
         }
       }

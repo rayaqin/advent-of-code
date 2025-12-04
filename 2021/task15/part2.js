@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,22 +18,31 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let nodesMatrix = source.split('\n').map((line) => line.split('').map((char) => parseInt(char)));
+  let nodesMatrix = source
+    .split("\n")
+    .map((line) => line.split("").map((char) => parseInt(char)));
   // expand 5 times both directions
-  let extendedMatrixOfNodes = Array.from(Array(nodesMatrix.length * 5), () => Array.from(Array(nodesMatrix[0].length * 5)));
+  let extendedMatrixOfNodes = Array.from(Array(nodesMatrix.length * 5), () =>
+    Array.from(Array(nodesMatrix[0].length * 5)),
+  );
   for (let x = 0; x < extendedMatrixOfNodes.length; x++) {
     for (let y = 0; y < extendedMatrixOfNodes[x].length; y++) {
       if (x < nodesMatrix.length && y < nodesMatrix.length) {
-        extendedMatrixOfNodes[x][y] = { value: nodesMatrix[x][y], visited: false, distance: Infinity, neighbours: [] };
+        extendedMatrixOfNodes[x][y] = {
+          value: nodesMatrix[x][y],
+          visited: false,
+          distance: Infinity,
+          neighbours: [],
+        };
         continue;
       }
       let dimensionX = Math.floor(x / nodesMatrix.length);
@@ -41,7 +52,12 @@ const solution = (source) => {
       let OGvalue = nodesMatrix[OGposX][OGposY];
       let currentValue = OGvalue;
       currentValue = mutateNodeValue(currentValue, dimensionX + dimensionY);
-      extendedMatrixOfNodes[x][y] = { value: currentValue, visited: false, distance: Infinity, neighbours: [] };
+      extendedMatrixOfNodes[x][y] = {
+        value: currentValue,
+        visited: false,
+        distance: Infinity,
+        neighbours: [],
+      };
     }
   }
 
@@ -52,24 +68,38 @@ const solution = (source) => {
 
   for (let x = 0; x < extendedMatrixOfNodes.length; x++) {
     for (let y = 0; y < extendedMatrixOfNodes[x].length; y++) {
-      if (x + 1 < extendedMatrixOfNodes.length) extendedMatrixOfNodes[x][y].neighbours.push(x + 1 + ',' + y);
-      if (x - 1 >= 0) extendedMatrixOfNodes[x][y].neighbours.push(x - 1 + ',' + y);
-      if (y + 1 < extendedMatrixOfNodes[x].length) extendedMatrixOfNodes[x][y].neighbours.push(x + ',' + (y + 1));
-      if (y - 1 >= 0) extendedMatrixOfNodes[x][y].neighbours.push(x + ',' + (y - 1));
-      nodeMap[x + ',' + y] = extendedMatrixOfNodes[x][y];
-      unvisitedNodeKeys.add(x + ',' + y);
-      if (x == extendedMatrixOfNodes.length - 1 && y == extendedMatrixOfNodes[x].length - 1) {
-        destinationNodeKey = x + ',' + y;
+      if (x + 1 < extendedMatrixOfNodes.length)
+        extendedMatrixOfNodes[x][y].neighbours.push(x + 1 + "," + y);
+      if (x - 1 >= 0)
+        extendedMatrixOfNodes[x][y].neighbours.push(x - 1 + "," + y);
+      if (y + 1 < extendedMatrixOfNodes[x].length)
+        extendedMatrixOfNodes[x][y].neighbours.push(x + "," + (y + 1));
+      if (y - 1 >= 0)
+        extendedMatrixOfNodes[x][y].neighbours.push(x + "," + (y - 1));
+      nodeMap[x + "," + y] = extendedMatrixOfNodes[x][y];
+      unvisitedNodeKeys.add(x + "," + y);
+      if (
+        x == extendedMatrixOfNodes.length - 1 &&
+        y == extendedMatrixOfNodes[x].length - 1
+      ) {
+        destinationNodeKey = x + "," + y;
       }
     }
   }
 
-  nodeMap['0,0'].distance = 0;
-  let currentNodeKey = returnSmallestDistanceNodeKey(unvisitedNodeKeys, nodeMap);
-  while (destinationNodeKey !== currentNodeKey && nodeMap[destinationNodeKey].visited === false) {
+  nodeMap["0,0"].distance = 0;
+  let currentNodeKey = returnSmallestDistanceNodeKey(
+    unvisitedNodeKeys,
+    nodeMap,
+  );
+  while (
+    destinationNodeKey !== currentNodeKey &&
+    nodeMap[destinationNodeKey].visited === false
+  ) {
     nodeMap[currentNodeKey].neighbours.forEach((neighbour) => {
       if (unvisitedNodeKeys.has(neighbour)) {
-        let currentDistance = currentNodeKey === '0,0' ? 0 : nodeMap[currentNodeKey].distance;
+        let currentDistance =
+          currentNodeKey === "0,0" ? 0 : nodeMap[currentNodeKey].distance;
         let purposedNewValue = currentDistance + nodeMap[neighbour].value;
         let oldValue = nodeMap[neighbour].distance;
         nodeMap[neighbour].distance = Math.min(oldValue, purposedNewValue);
@@ -86,7 +116,10 @@ const solution = (source) => {
 const returnSmallestDistanceNodeKey = (univisitedKeys, nodeMap) => {
   let smallestNodeKey = null;
   univisitedKeys.forEach((coordinate) => {
-    if (!nodeMap[smallestNodeKey] || nodeMap[smallestNodeKey].distance > nodeMap[coordinate].distance) {
+    if (
+      !nodeMap[smallestNodeKey] ||
+      nodeMap[smallestNodeKey].distance > nodeMap[coordinate].distance
+    ) {
       smallestNodeKey = coordinate;
     }
   });

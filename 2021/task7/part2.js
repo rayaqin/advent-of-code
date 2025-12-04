@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,21 +18,21 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
   let positions = source
-    .split(',')
+    .split(",")
     .map((a) => parseInt(a))
     .sort((a, b) => a - b);
 
-  canvas.innerHTML += '<br />' + 'positions: ' + positions.join(' ');
+  canvas.innerHTML += "<br />" + "positions: " + positions.join(" ");
 
   let bestMeetingHeight = { num: 0, fuelUsed: null };
   for (let i = Math.min(...positions); i < Math.max(...positions); i++) {
@@ -38,14 +40,17 @@ const solution = (source) => {
     positions.forEach((p) => {
       fuelUsed += getFuelCost(Math.abs(p - i));
     });
-    if (bestMeetingHeight.fuelUsed === null || fuelUsed < bestMeetingHeight.fuelUsed) {
+    if (
+      bestMeetingHeight.fuelUsed === null ||
+      fuelUsed < bestMeetingHeight.fuelUsed
+    ) {
       bestMeetingHeight.num = i;
       bestMeetingHeight.fuelUsed = fuelUsed;
     }
   }
 
-  canvas.innerHTML += '<br />' + 'meeting point: ' + bestMeetingHeight.num;
-  canvas.innerHTML += '<br />' + 'fuel needed: ' + bestMeetingHeight.fuelUsed;
+  canvas.innerHTML += "<br />" + "meeting point: " + bestMeetingHeight.num;
+  canvas.innerHTML += "<br />" + "fuel needed: " + bestMeetingHeight.fuelUsed;
 };
 
 const getFuelCost = (distance) => {

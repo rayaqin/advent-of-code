@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,12 +39,16 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
 const getSolutionForPart1 = (source) => {
-  const { numberOfRows, numberOfColumns, treeObjectGrid } = getRelevantDataFromSource(source);
+  const { numberOfRows, numberOfColumns, treeObjectGrid } =
+    getRelevantDataFromSource(source);
 
   let visibilityCounter = 0;
 
@@ -56,7 +63,8 @@ const getSolutionForPart1 = (source) => {
 };
 
 const getSolutionForPart2 = (source) => {
-  const { numberOfRows, numberOfColumns, treeObjectGrid } = getRelevantDataFromSource(source);
+  const { numberOfRows, numberOfColumns, treeObjectGrid } =
+    getRelevantDataFromSource(source);
 
   let highestScenicScore = 0;
 
@@ -70,7 +78,12 @@ const getSolutionForPart2 = (source) => {
   return highestScenicScore;
 };
 
-const setTreeVisibility = (tree, treeObjectGrid, numberOfRows, numberOfColumns) => {
+const setTreeVisibility = (
+  tree,
+  treeObjectGrid,
+  numberOfRows,
+  numberOfColumns,
+) => {
   if (tree.isOnTheEdge) {
     tree.isVisible = true;
     return tree;
@@ -88,7 +101,12 @@ const setTreeVisibility = (tree, treeObjectGrid, numberOfRows, numberOfColumns) 
 
   const currentTreeHeight = treeObjectGrid[tree.y][tree.x].value;
 
-  while (!topCheckDone || !rightCheckDone || !bottomCheckDone || !leftCheckDone) {
+  while (
+    !topCheckDone ||
+    !rightCheckDone ||
+    !bottomCheckDone ||
+    !leftCheckDone
+  ) {
     if (!topCheckDone) {
       if (treeObjectGrid[tree.y - up][tree.x].value >= currentTreeHeight) {
         topCheckDone = true;
@@ -134,7 +152,12 @@ const setTreeVisibility = (tree, treeObjectGrid, numberOfRows, numberOfColumns) 
   return tree;
 };
 
-const setTreeScenicScore = (tree, treeObjectGrid, numberOfRows, numberOfColumns) => {
+const setTreeScenicScore = (
+  tree,
+  treeObjectGrid,
+  numberOfRows,
+  numberOfColumns,
+) => {
   if (tree.isOnTheEdge) {
     tree.scenicScore = 0;
     return tree;
@@ -152,9 +175,17 @@ const setTreeScenicScore = (tree, treeObjectGrid, numberOfRows, numberOfColumns)
 
   const currentTreeHeight = treeObjectGrid[tree.y][tree.x].value;
 
-  while (!topCheckDone || !rightCheckDone || !bottomCheckDone || !leftCheckDone) {
+  while (
+    !topCheckDone ||
+    !rightCheckDone ||
+    !bottomCheckDone ||
+    !leftCheckDone
+  ) {
     if (!topCheckDone) {
-      if (treeObjectGrid[tree.y - up][tree.x].value >= currentTreeHeight || tree.y - up === 0) {
+      if (
+        treeObjectGrid[tree.y - up][tree.x].value >= currentTreeHeight ||
+        tree.y - up === 0
+      ) {
         debugger;
         topCheckDone = true;
       } else {
@@ -162,21 +193,30 @@ const setTreeScenicScore = (tree, treeObjectGrid, numberOfRows, numberOfColumns)
       }
     }
     if (!rightCheckDone) {
-      if (treeObjectGrid[tree.y][tree.x + right].value >= currentTreeHeight || tree.x + right === numberOfColumns - 1) {
+      if (
+        treeObjectGrid[tree.y][tree.x + right].value >= currentTreeHeight ||
+        tree.x + right === numberOfColumns - 1
+      ) {
         rightCheckDone = true;
       } else {
         right++;
       }
     }
     if (!bottomCheckDone) {
-      if (treeObjectGrid[tree.y + down][tree.x].value >= currentTreeHeight || tree.y + down === numberOfRows - 1) {
+      if (
+        treeObjectGrid[tree.y + down][tree.x].value >= currentTreeHeight ||
+        tree.y + down === numberOfRows - 1
+      ) {
         bottomCheckDone = true;
       } else {
         down++;
       }
     }
     if (!leftCheckDone) {
-      if (treeObjectGrid[tree.y][tree.x - left].value >= currentTreeHeight || tree.x - left === 0) {
+      if (
+        treeObjectGrid[tree.y][tree.x - left].value >= currentTreeHeight ||
+        tree.x - left === 0
+      ) {
         leftCheckDone = true;
       } else {
         left++;
@@ -199,10 +239,13 @@ const getRelevantDataFromSource = (source) => {
       x: columnIndex,
       y: rowIndex,
       isOnTheEdge:
-        columnIndex === 0 || rowIndex === 0 || columnIndex === numberOfColumns - 1 || rowIndex === numberOfRows - 1,
+        columnIndex === 0 ||
+        rowIndex === 0 ||
+        columnIndex === numberOfColumns - 1 ||
+        rowIndex === numberOfRows - 1,
       isVisible: undefined,
       scenicScore: undefined,
-    }))
+    })),
   );
 
   return {

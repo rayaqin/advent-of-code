@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,19 +18,23 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let rawInputParts = source.split('\n\n');
+  let rawInputParts = source.split("\n\n");
   let polymer = rawInputParts[0];
   let instructions = new Map();
-  rawInputParts[1].split('\n').forEach((line) => instructions.set(line.split('->')[0].trim(), line.split('->')[1].trim()));
+  rawInputParts[1]
+    .split("\n")
+    .forEach((line) =>
+      instructions.set(line.split("->")[0].trim(), line.split("->")[1].trim()),
+    );
 
   for (let i = 0; i < 10; i++) {
     polymer = getNewPolymerAfterOneStep(polymer, instructions);
@@ -55,10 +61,14 @@ const solution = (source) => {
 };
 
 const getNewPolymerAfterOneStep = (polymer, instructions) => {
-  let polymerData = polymer.split('').map((c) => ({ char: c, original: true }));
+  let polymerData = polymer.split("").map((c) => ({ char: c, original: true }));
   for (let i = 0; i < polymerData.length - 1; i++) {
     let pair = polymerData[i].char + polymerData[i + 1].char;
-    if (polymerData[i].original && polymerData[i + 1].original && !!instructions.get(pair)) {
+    if (
+      polymerData[i].original &&
+      polymerData[i + 1].original &&
+      !!instructions.get(pair)
+    ) {
       polymerData = [
         ...polymerData.slice(0, i + 1),
         { char: instructions.get(pair), original: false },
@@ -66,5 +76,5 @@ const getNewPolymerAfterOneStep = (polymer, instructions) => {
       ];
     }
   }
-  return polymerData.map((a) => a.char).join('');
+  return polymerData.map((a) => a.char).join("");
 };

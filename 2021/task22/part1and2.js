@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,46 +18,72 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  const commands = source.split('\n').map((line) => {
-    let ranges = line.split(' ')[1].split(',');
-    let x = { from: ranges[0].match(/(?<=[=])-?[0-9]+/)[0], to: ranges[0].match(/(?<=[.])-?[0-9]+/)[0] };
-    let y = { from: ranges[1].match(/(?<=[=])-?[0-9]+/)[0], to: ranges[1].match(/(?<=[.])-?[0-9]+/)[0] };
-    let z = { from: ranges[2].match(/(?<=[=])-?[0-9]+/)[0], to: ranges[2].match(/(?<=[.])-?[0-9]+/)[0] };
+  const commands = source.split("\n").map((line) => {
+    let ranges = line.split(" ")[1].split(",");
+    let x = {
+      from: ranges[0].match(/(?<=[=])-?[0-9]+/)[0],
+      to: ranges[0].match(/(?<=[.])-?[0-9]+/)[0],
+    };
+    let y = {
+      from: ranges[1].match(/(?<=[=])-?[0-9]+/)[0],
+      to: ranges[1].match(/(?<=[.])-?[0-9]+/)[0],
+    };
+    let z = {
+      from: ranges[2].match(/(?<=[=])-?[0-9]+/)[0],
+      to: ranges[2].match(/(?<=[.])-?[0-9]+/)[0],
+    };
 
     return {
-      commandType: line.split(' ')[0],
-      minPoint: { x: parseInt(x.from), y: parseInt(y.from), z: parseInt(z.from) },
-      maxPoint: { x: parseInt(x.to), y: parseInt(y.to), z: parseInt(z.to) },
+      commandType: line.split(" ")[0],
+      minPoint: {
+        x: parseInt(x.from),
+        y: parseInt(y.from),
+        z: parseInt(z.from),
+      },
+      maxPoint: {
+        x: parseInt(x.to),
+        y: parseInt(y.to),
+        z: parseInt(z.to),
+      },
     };
   });
   let resultCuboids = [];
 
   commands.forEach((commandCuboid) => {
     if (resultCuboids.length === 0) {
-      resultCuboids.push({ minPoint: commandCuboid.minPoint, maxPoint: commandCuboid.maxPoint });
+      resultCuboids.push({
+        minPoint: commandCuboid.minPoint,
+        maxPoint: commandCuboid.maxPoint,
+      });
     } else {
       let currentResults = [];
       for (let i = 0; i < resultCuboids.length; i++) {
         let existingCuboid = resultCuboids[i];
         if (checkIfTwoCuboidDataIntersect(commandCuboid, existingCuboid)) {
-          let remnantsOfExisting = getCuboidsAfterCommandExecution(commandCuboid, existingCuboid);
+          let remnantsOfExisting = getCuboidsAfterCommandExecution(
+            commandCuboid,
+            existingCuboid,
+          );
           remnantsOfExisting.forEach((remnant) => {
             currentResults.push(remnant);
           });
           resultCuboids[i] = null;
         }
       }
-      if (commandCuboid.commandType === 'on') {
-        currentResults.push({ minPoint: commandCuboid.minPoint, maxPoint: commandCuboid.maxPoint });
+      if (commandCuboid.commandType === "on") {
+        currentResults.push({
+          minPoint: commandCuboid.minPoint,
+          maxPoint: commandCuboid.maxPoint,
+        });
       }
       resultCuboids = resultCuboids.filter((a) => a !== null);
       currentResults.forEach((resultCuboid) => {
@@ -75,7 +103,7 @@ const calculateSumOfCuboidVolumes = (listOfCuboids) => {
         (curr.maxPoint.x + 1 - curr.minPoint.x) *
         (curr.maxPoint.y + 1 - curr.minPoint.y) *
         (curr.maxPoint.z + 1 - curr.minPoint.z)),
-    0
+    0,
   );
 };
 
@@ -100,19 +128,19 @@ const getCuboidsAfterCommandExecution = (commandCuboid, existingCuboid) => {
     existingCuboid.minPoint.x,
     existingCuboid.maxPoint.x,
     commandCuboid.minPoint.x,
-    commandCuboid.maxPoint.x
+    commandCuboid.maxPoint.x,
   );
   let yRanges = getResultRanges(
     existingCuboid.minPoint.y,
     existingCuboid.maxPoint.y,
     commandCuboid.minPoint.y,
-    commandCuboid.maxPoint.y
+    commandCuboid.maxPoint.y,
   );
   let zRanges = getResultRanges(
     existingCuboid.minPoint.z,
     existingCuboid.maxPoint.z,
     commandCuboid.minPoint.z,
-    commandCuboid.maxPoint.z
+    commandCuboid.maxPoint.z,
   );
 
   let cuboidSlices = [];
@@ -167,7 +195,10 @@ const getCuboidsAfterCommandExecution = (commandCuboid, existingCuboid) => {
         !checkIfTwoCuboidDataIdentical(cuboidSlices[i], cuboidSlices[j]) &&
         checkIfTwoCuboidDataIntersect(cuboidSlices[i], cuboidSlices[j])
       ) {
-        cuboidSlices[i] = avoidOverlapByReduction(cuboidSlices[i], cuboidSlices[j]);
+        cuboidSlices[i] = avoidOverlapByReduction(
+          cuboidSlices[i],
+          cuboidSlices[j],
+        );
       }
     }
   }
@@ -179,10 +210,18 @@ const getResultRanges = (existingMin, existingMax, commandMin, commandMax) => {
   if (commandMin <= existingMin && commandMax >= existingMax) {
     return [];
   }
-  if (commandMin <= existingMin && commandMax < existingMax && commandMax >= existingMin) {
+  if (
+    commandMin <= existingMin &&
+    commandMax < existingMax &&
+    commandMax >= existingMin
+  ) {
     return [{ min: commandMax + 1, max: existingMax }];
   }
-  if (commandMin >= existingMin && commandMin <= existingMax && commandMax >= existingMax) {
+  if (
+    commandMin >= existingMin &&
+    commandMin <= existingMax &&
+    commandMax >= existingMax
+  ) {
     return [{ min: existingMin, max: commandMin - 1 }];
   }
   if (commandMin > existingMin && commandMax < existingMax) {
@@ -191,10 +230,13 @@ const getResultRanges = (existingMin, existingMax, commandMin, commandMax) => {
       { min: commandMax + 1, max: existingMax },
     ];
   }
-  return ['wtf'];
+  return ["wtf"];
 };
 
 // only run this if slices intersect
 const avoidOverlapByReduction = (sliceA, sliceB) => {
-  return getCuboidsAfterCommandExecution({ ...sliceB, commandType: 'off' }, sliceA)[0];
+  return getCuboidsAfterCommandExecution(
+    { ...sliceB, commandType: "off" },
+    sliceA,
+  )[0];
 };

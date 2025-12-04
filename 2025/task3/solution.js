@@ -2,7 +2,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
   alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
+    "The File APIs are not fully supported in this browser. The code won't work.",
   );
 }
 
@@ -53,7 +53,7 @@ const getSolutionForPart1 = (source) => {
 
   return batteryBanks.reduce(
     (sum, currentBank) => sum + getHighestBatteryNComboFromBank(currentBank, 2),
-    0
+    0,
   );
 };
 
@@ -65,7 +65,7 @@ const getSolutionForPart2 = (source) => {
   return batteryBanks.reduce(
     (sum, currentBank) =>
       sum + getHighestBatteryNComboFromBank(currentBank, 12),
-    0
+    0,
   );
 };
 
@@ -88,7 +88,7 @@ const getHighestBatteryNComboFromBank = (batteryBank, n) => {
       remainingPossibleBatteries[nextDigitIndex] * Math.pow(10, i - 1);
 
     remainingPossibleBatteries = remainingPossibleBatteries.slice(
-      nextDigitIndex + 1
+      nextDigitIndex + 1,
     );
   }
 

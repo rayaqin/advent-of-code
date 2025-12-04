@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,18 +18,18 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let positions = source.split('\n').map((line) => +line.split(': ')[1]);
-  let playerOnePosition = parseInt(source.split('\n')[0].split('').pop());
-  let playerTwoPosition = parseInt(source.split('\n')[1].split('').pop());
+  let positions = source.split("\n").map((line) => +line.split(": ")[1]);
+  let playerOnePosition = parseInt(source.split("\n")[0].split("").pop());
+  let playerTwoPosition = parseInt(source.split("\n")[1].split("").pop());
   const rolls = [1, 2, 3];
 
   const wins = [0, 0];
@@ -40,7 +42,9 @@ const solution = (source) => {
     for (let i = 0; i < 2; i++) {
       const nextGameCounts = {};
       for (let [state, gameCount] of Object.entries(gameCounts)) {
-        [positions, scores] = state.split(';').map((s) => s.split(',').map((a) => parseInt(a)));
+        [positions, scores] = state
+          .split(";")
+          .map((s) => s.split(",").map((a) => parseInt(a)));
 
         for (let r1 of rolls) {
           for (let r2 of rolls) {
@@ -57,7 +61,8 @@ const solution = (source) => {
               }
 
               const nextState = `${nextPositions[0]},${nextPositions[1]};${nextScores[0]},${nextScores[1]}`;
-              nextGameCounts[nextState] = (nextGameCounts[nextState] ?? 0) + gameCount;
+              nextGameCounts[nextState] =
+                (nextGameCounts[nextState] ?? 0) + gameCount;
             }
           }
         }

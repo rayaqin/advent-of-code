@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,18 +18,18 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let entries = source.split('\n').map((a) => ({
-    signalPatterns: a.split('|')[0].trim().split(' '),
-    output: a.split('|')[1].trim().split(' '),
+  let entries = source.split("\n").map((a) => ({
+    signalPatterns: a.split("|")[0].trim().split(" "),
+    output: a.split("|")[1].trim().split(" "),
   }));
 
   let numberCounts = {
@@ -55,13 +57,14 @@ const solution = (source) => {
   });
 
   Object.keys(numberCounts).forEach((current) => {
-    canvas.innerHTML += '<br />' + 'number ' + current + ': ' + numberCounts[current] + '<br />';
+    canvas.innerHTML +=
+      "<br />" + "number " + current + ": " + numberCounts[current] + "<br />";
   });
 
   canvas.innerHTML +=
-    '<br />' +
-    '<br />' +
-    'sum: ' +
+    "<br />" +
+    "<br />" +
+    "sum: " +
     Object.keys(numberCounts).reduce((acc, curr) => {
       return acc + numberCounts[curr];
     }, 0);

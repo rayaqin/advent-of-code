@@ -2,7 +2,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
   alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
+    "The File APIs are not fully supported in this browser. The code won't work.",
   );
 }
 
@@ -52,7 +52,7 @@ const getSolutionForPart1 = (source) => {
     .map(
       (rotationInstruction) =>
         Number(rotationInstruction.slice(1)) *
-        (rotationInstruction[0] === "L" ? -1 : 1)
+        (rotationInstruction[0] === "L" ? -1 : 1),
     )
     .reduce(
       (dialData, rotationDistance) => {
@@ -71,7 +71,7 @@ const getSolutionForPart1 = (source) => {
         }
         return dialData;
       },
-      { dialPosition: 50, zeroVisitCount: 0 }
+      { dialPosition: 50, zeroVisitCount: 0 },
     ).zeroVisitCount;
 };
 
@@ -82,7 +82,7 @@ const getSolutionForPart2 = (source) => {
     .map(
       (rotationInstruction) =>
         Number(rotationInstruction.slice(1)) *
-        (rotationInstruction[0] === "L" ? -1 : 1)
+        (rotationInstruction[0] === "L" ? -1 : 1),
     )
     .reduce(
       (dialData, rotationDistance) => {
@@ -115,7 +115,7 @@ const getSolutionForPart2 = (source) => {
         // console.log("------------------------------");
         return dialData;
       },
-      { dialPosition: 50, zeroVisitCount: 0 }
+      { dialPosition: 50, zeroVisitCount: 0 },
     );
 };
 
@@ -149,7 +149,7 @@ const getZeroCrosses = ({
   if (previousDialPosition + rotationDistance <= 0) {
     return (
       Math.floor(
-        Math.abs(previousDialPosition + rotationDistance) / dialLength
+        Math.abs(previousDialPosition + rotationDistance) / dialLength,
       ) + Number(previousDialPosition !== 0 || newDialPosition === 0)
     );
   }

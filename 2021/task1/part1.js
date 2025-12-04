@@ -1,15 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
   alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
+    "The File APIs are not fully supported in this browser. The code won't work.",
   );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -18,31 +18,31 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  const depthLevels = source.split('\n').map((d) => parseInt(d));
+  const depthLevels = source.split("\n").map((d) => parseInt(d));
   const depthChanges = [
-    { depth: depthLevels[0], change: 'n/a - no previous measurement' },
+    { depth: depthLevels[0], change: "n/a - no previous measurement" },
   ];
   let numberOfDepthIncreases = 0;
 
   for (let i = 0; i < depthLevels.length - 1; i++) {
-    let change = '';
+    let change = "";
 
     if (depthLevels[i] === depthLevels[i + 1]) {
-      change = 'no change';
+      change = "no change";
     } else if (depthLevels[i] < depthLevels[i + 1]) {
-      change = 'increased';
+      change = "increased";
       numberOfDepthIncreases++;
     } else {
-      change = 'decreased';
+      change = "decreased";
     }
 
     depthChanges.push({
@@ -52,13 +52,13 @@ const solution = (source) => {
   }
 
   canvas.innerHTML =
-    '<b>Depth changes</b>' +
-    '<br />' +
+    "<b>Depth changes</b>" +
+    "<br />" +
     depthChanges.map((dc) => {
-      return '<br />' + dc.depth + ' - ' + dc.change;
+      return "<br />" + dc.depth + " - " + dc.change;
     }) +
-    '<br />' +
-    '<br />' +
-    'Number of depth increases: ' +
+    "<br />" +
+    "<br />" +
+    "Number of depth increases: " +
     numberOfDepthIncreases;
 };

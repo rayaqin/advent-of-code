@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 let possibleRoutes = 0;
 
@@ -18,20 +20,25 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
   let caves = {};
-  let caveSchema = { id: '', isBig: false, connections: [], isSpecial: false };
-  source.split('\n').forEach((caveConnection) => {
-    let fromCaveId = caveConnection.split('-')[0];
-    let toCaveId = caveConnection.split('-')[1];
+  let caveSchema = {
+    id: "",
+    isBig: false,
+    connections: [],
+    isSpecial: false,
+  };
+  source.split("\n").forEach((caveConnection) => {
+    let fromCaveId = caveConnection.split("-")[0];
+    let toCaveId = caveConnection.split("-")[1];
     if (!caves[fromCaveId]) {
       caves[fromCaveId] = {
         ...JSON.parse(JSON.stringify(caveSchema)),
@@ -52,21 +59,21 @@ const solution = (source) => {
   let routes = [];
 
   Object.values(caves).forEach((cave) => {
-    if (!cave.isBig && cave.id !== 'start' && cave.id !== 'end') {
+    if (!cave.isBig && cave.id !== "start" && cave.id !== "end") {
       cave.isSpecial = true;
-      console.log('special cave: ', cave.id);
-      visitAllConnections(caves['start'], [], routes);
+      console.log("special cave: ", cave.id);
+      visitAllConnections(caves["start"], [], routes);
       cave.isSpecial = false;
     }
   });
 
-  visitAllConnections(caves['start'], [], routes);
+  visitAllConnections(caves["start"], [], routes);
   console.log(routes);
 };
 
 const visitAllConnections = (thisCave, currentRoute, routes) => {
   currentRoute.push(thisCave.id);
-  if (thisCave.id === 'end' && !isRouteInRoutes(currentRoute, routes)) {
+  if (thisCave.id === "end" && !isRouteInRoutes(currentRoute, routes)) {
     routes.push(currentRoute);
     return;
   }
@@ -75,7 +82,8 @@ const visitAllConnections = (thisCave, currentRoute, routes) => {
     if (
       (thisCave.connections[i].isBig ||
         !currentRoute.includes(thisCave.connections[i].id) ||
-        (thisCave.connections[i].isSpecial && countIdInRoute(thisCave.connections[i].id, currentRoute) < 2)) &&
+        (thisCave.connections[i].isSpecial &&
+          countIdInRoute(thisCave.connections[i].id, currentRoute) < 2)) &&
       (thisCave.isBig ||
         thisCave.connections[i].connections.length > 1 ||
         (thisCave.isSpecial && countIdInRoute(thisCave.id, currentRoute) < 2))

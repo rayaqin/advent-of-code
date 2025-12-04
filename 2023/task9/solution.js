@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,28 +39,31 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
-
 const getSolutionForPart1 = (source) => {
-  return source.split('\r\n')
-    .map(line => line.match(/-?\d+/g).map(Number))
-    .map(numArray => getNextNumber(numArray, []))
-    .reduce((acc, currNextNum) => acc + currNextNum)
+  return source
+    .split("\r\n")
+    .map((line) => line.match(/-?\d+/g).map(Number))
+    .map((numArray) => getNextNumber(numArray, []))
+    .reduce((acc, currNextNum) => acc + currNextNum);
 };
 
-
 const getSolutionForPart2 = (source) => {
-  return source.split('\r\n')
-    .map(line => line.match(/-?\d+/g).map(Number))
-    .map(numArray => getPreviousNumber(numArray, []))
-    .reduce((acc, currPrevNum) => acc + currPrevNum)
+  return source
+    .split("\r\n")
+    .map((line) => line.match(/-?\d+/g).map(Number))
+    .map((numArray) => getPreviousNumber(numArray, []))
+    .reduce((acc, currPrevNum) => acc + currPrevNum);
 };
 
 const getNextNumber = (numArray, ends) => {
-  if (numArray.length === 0 || numArray.every(a => a === 0)) {
+  if (numArray.length === 0 || numArray.every((a) => a === 0)) {
     return ends.reduce((newNum, currEnd) => currEnd + newNum, 0);
   }
   let diffs = [];
@@ -69,7 +75,7 @@ const getNextNumber = (numArray, ends) => {
 };
 
 const getPreviousNumber = (numArray, starts) => {
-  if (numArray.length === 0 || numArray.every(a => a === 0)) {
+  if (numArray.length === 0 || numArray.every((a) => a === 0)) {
     return starts.reverse().reduce((acc, currStart) => currStart - acc, 0);
   }
   let diffs = [];
@@ -80,4 +86,3 @@ const getPreviousNumber = (numArray, starts) => {
 
   return getPreviousNumber(diffs, starts);
 };
-

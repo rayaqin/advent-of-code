@@ -2,7 +2,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
   alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
+    "The File APIs are not fully supported in this browser. The code won't work.",
   );
 }
 
@@ -46,10 +46,9 @@ const solveSelectedPart = (partId) => {
   console.log(`Solution for part ${partId}:`, solution);
 };
 
-
 const getSolutionForPart1 = (source) => {
-  return "1"
+  return "1";
 };
 const getSolutionForPart2 = (source) => {
-  return "2"
+  return "2";
 };

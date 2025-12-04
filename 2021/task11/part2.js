@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 let flashes = 0;
 
@@ -18,18 +20,20 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
   let octopusGrid = source
-    .split('\n')
-    .map((line) => line.split('').map((c) => ({ energy: parseInt(c), justFlashed: false })));
+    .split("\n")
+    .map((line) =>
+      line.split("").map((c) => ({ energy: parseInt(c), justFlashed: false })),
+    );
 
   let ready = false;
   let stepCount = 0;
@@ -67,12 +71,14 @@ const performOneFlash = (oGrid) => {
         oGrid[x][y].justFlashed = true;
         if (x + 1 !== oGrid.length) oGrid[x + 1][y].energy++;
         if (y + 1 !== oGrid[x].length) oGrid[x][y + 1].energy++;
-        if (x + 1 !== oGrid.length && y + 1 !== oGrid[x].length) oGrid[x + 1][y + 1].energy++;
+        if (x + 1 !== oGrid.length && y + 1 !== oGrid[x].length)
+          oGrid[x + 1][y + 1].energy++;
         if (x - 1 >= 0) oGrid[x - 1][y].energy++;
         if (y - 1 >= 0) oGrid[x][y - 1].energy++;
         if (x - 1 >= 0 && y - 1 >= 0) oGrid[x - 1][y - 1].energy++;
         if (x + 1 !== oGrid.length && y - 1 >= 0) oGrid[x + 1][y - 1].energy++;
-        if (x - 1 >= 0 && y + 1 !== oGrid[x].length) oGrid[x - 1][y + 1].energy++;
+        if (x - 1 >= 0 && y + 1 !== oGrid[x].length)
+          oGrid[x - 1][y + 1].energy++;
       }
     }
   }

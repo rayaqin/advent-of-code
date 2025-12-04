@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,20 +18,20 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let scannerData = source.split('\n\n').map((scannerBlock) =>
+  let scannerData = source.split("\n\n").map((scannerBlock) =>
     scannerBlock
-      .split('\n')
-      .filter((line) => line.indexOf('---') < 0)
-      .map((line) => line.split(',').map((x) => parseInt(x)))
+      .split("\n")
+      .filter((line) => line.indexOf("---") < 0)
+      .map((line) => line.split(",").map((x) => parseInt(x))),
   );
   const results = [];
   const foundScanners = new Map(); //map scanner-N indexes to pairs of beacon-triangle data with scanner-0
@@ -64,7 +66,9 @@ const solution = (source) => {
         if (
           !scannerData[0].some(
             (existingBeacon) =>
-              existingBeacon[0] == newBeacon[0] && existingBeacon[1] == newBeacon[1] && existingBeacon[2] == newBeacon[2]
+              existingBeacon[0] == newBeacon[0] &&
+              existingBeacon[1] == newBeacon[1] &&
+              existingBeacon[2] == newBeacon[2],
           )
         )
           scannerData[0].push(newBeacon);
@@ -85,13 +89,14 @@ const solution = (source) => {
   let farthest = 0;
   for (const a of scanners) {
     for (const b of scanners) {
-      let d = Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
+      let d =
+        Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]);
       farthest = Math.max(d, farthest);
     }
   }
   results[1] = farthest;
 
-  console.log('Part1: ' + results[0] + '\nPart2: ' + results[1]);
+  console.log("Part1: " + results[0] + "\nPart2: " + results[1]);
 };
 
 const createBeaconDataObjects = (scanners) => {
@@ -108,9 +113,16 @@ const createBeaconDataObjects = (scanners) => {
 
       bc.peers.sort((a, b) => a.distance - b.distance).splice(2);
       bc.sum = bc.peers.reduce((acc, curr) => acc + curr.distance, 0); // sum of distances from bc
-      bc.peersDistance = getDistance(scanner[bc.peers[0].peerIndex], scanner[bc.peers[1].peerIndex]); // peers' distance from each other
+      bc.peersDistance = getDistance(
+        scanner[bc.peers[0].peerIndex],
+        scanner[bc.peers[1].peerIndex],
+      ); // peers' distance from each other
       bc.checkSum = bc.sum * bc.peersDistance; // hopefully unique number created from triangle data
-      bc.tri = [beacon, scanner[bc.peers[0].peerIndex], scanner[bc.peers[1].peerIndex]]; // store triangle points
+      bc.tri = [
+        beacon,
+        scanner[bc.peers[0].peerIndex],
+        scanner[bc.peers[1].peerIndex],
+      ]; // store triangle points
       beacons.push(bc);
     });
   });

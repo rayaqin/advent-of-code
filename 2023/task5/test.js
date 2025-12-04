@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
-const input = `seeds: 630335678 71155519 260178142 125005421 1548082684 519777283 4104586697 30692976 1018893962 410959790 3570781652 45062110 74139777 106006724 3262608046 213460151 3022784256 121993130 2138898608 36769984
+const input =
+  `seeds: 630335678 71155519 260178142 125005421 1548082684 519777283 4104586697 30692976 1018893962 410959790 3570781652 45062110 74139777 106006724 3262608046 213460151 3022784256 121993130 2138898608 36769984
 
 seed-to-soil map:
 2977255263 3423361099 161177662
@@ -211,49 +212,84 @@ humidity-to-location map:
 536612207 1265535688 142084550
 757385927 84721366 32401782
 1327116227 694763977 520514661`.split("\n\n");
-const seeds = input[0].split(": ")[1].split(" ").map(x => parseInt(x)).reduce((a, x, i) => {
+const seeds = input[0]
+  .split(": ")[1]
+  .split(" ")
+  .map((x) => parseInt(x))
+  .reduce((a, x, i) => {
     if (i % 2 == 0) a.push([]);
-    return a[a.length - 1].push(x), a;
-}, []);
-const maps = input.slice(1).map(x => x.split("\n").slice(1).map(y => y.split(" ").map(z => parseInt(z))));
+    return (a[a.length - 1].push(x), a);
+  }, []);
+const maps = input.slice(1).map((x) =>
+  x
+    .split("\n")
+    .slice(1)
+    .map((y) => y.split(" ").map((z) => parseInt(z))),
+);
 const resultArray = [];
 
 function expand(index, values) {
-    if (index == maps.length) return [values];
+  if (index == maps.length) return [values];
 
-    const result = [];
-    for (const [destination, source, range] of maps[index]) {
-        if (values[0] < source && values[0] + values[1] > source && values[0] + values[1] <= source + range) {
-            const firstTuple = [values[0], source - values[0]];
-            const lastTuple = [destination, values[1] - source + values[0]];
-            result.push(...expand(index + 1, lastTuple), ...expand(index, firstTuple));
-            break;
-        }
-        else if (values[0] >= source && values[0] < source + range && values[0] + values[1] > source + range) {
-            const firstTuple = [destination + values[0] - source, source + range - values[0]];
-            const lastTuple = [source + range, values[0] + values[1] - source - range];
-            result.push(...expand(index + 1, firstTuple), ...expand(index, lastTuple));
-            break;
-        }
-        else if (values[0] >= source && values[0] + values[1] <= source + range) {
-            result.push(...expand(index + 1, [destination + values[0] - source, values[1]]));
-            break;
-        }
-        else if (values[0] < source && values[0] + values[1] > source + range) {
-            const firstTuple = [values[0], source - values[0]];
-            const middleTuple = [destination, range];
-            const lastTuple = [source + range, values[0] + values[1] - source - range];
-            result.push(...expand(index, lastTuple), ...expand(index + 1, middleTuple), ...expand(index, firstTuple));
-            break;
-        }
+  const result = [];
+  for (const [destination, source, range] of maps[index]) {
+    if (
+      values[0] < source &&
+      values[0] + values[1] > source &&
+      values[0] + values[1] <= source + range
+    ) {
+      const firstTuple = [values[0], source - values[0]];
+      const lastTuple = [destination, values[1] - source + values[0]];
+      result.push(
+        ...expand(index + 1, lastTuple),
+        ...expand(index, firstTuple),
+      );
+      break;
+    } else if (
+      values[0] >= source &&
+      values[0] < source + range &&
+      values[0] + values[1] > source + range
+    ) {
+      const firstTuple = [
+        destination + values[0] - source,
+        source + range - values[0],
+      ];
+      const lastTuple = [
+        source + range,
+        values[0] + values[1] - source - range,
+      ];
+      result.push(
+        ...expand(index + 1, firstTuple),
+        ...expand(index, lastTuple),
+      );
+      break;
+    } else if (values[0] >= source && values[0] + values[1] <= source + range) {
+      result.push(
+        ...expand(index + 1, [destination + values[0] - source, values[1]]),
+      );
+      break;
+    } else if (values[0] < source && values[0] + values[1] > source + range) {
+      const firstTuple = [values[0], source - values[0]];
+      const middleTuple = [destination, range];
+      const lastTuple = [
+        source + range,
+        values[0] + values[1] - source - range,
+      ];
+      result.push(
+        ...expand(index, lastTuple),
+        ...expand(index + 1, middleTuple),
+        ...expand(index, firstTuple),
+      );
+      break;
     }
+  }
 
-    if (result.length == 0) result.push(...expand(index + 1, values));
-    return result;
+  if (result.length == 0) result.push(...expand(index + 1, values));
+  return result;
 }
 
 for (const seed of seeds) {
-    resultArray.push(expand(0, seed));
+  resultArray.push(expand(0, seed));
 }
 
-console.log(Math.min(...resultArray.flat().map(x => x[0])));
+console.log(Math.min(...resultArray.flat().map((x) => x[0])));

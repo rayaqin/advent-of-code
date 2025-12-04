@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,41 +39,47 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
 const getSolutionForPart1 = (source) => {
-  const schematrix = source.split("\r\n").map(line => line.split(''));
+  const schematrix = source.split("\r\n").map((line) => line.split(""));
   let sum = 0;
 
   for (let x = 0; x < schematrix.length; x++) {
     for (let y = 0; y < schematrix[0].length; y++) {
-      if (/\d/.test((schematrix[x][y]))) {
+      if (/\d/.test(schematrix[x][y])) {
         let numberString = getNumData(x, y, schematrix[x]).digits;
-        const adjacentMatrix = getNumAdjacentMatrix(schematrix, x, y, numberString.length);
+        const adjacentMatrix = getNumAdjacentMatrix(
+          schematrix,
+          x,
+          y,
+          numberString.length,
+        );
         if (doesMatrixContainSymbol(adjacentMatrix)) {
           sum += parseInt(numberString);
-        };
+        }
         y += numberString.length - 1;
       }
     }
   }
 
   return sum;
-
 };
 
 const getSolutionForPart2 = (source) => {
-  const schematrix = source.split("\r\n").map(line => line.split(''));
+  const schematrix = source.split("\r\n").map((line) => line.split(""));
   const numDataMap = new Map();
   const starMap = new Map();
 
   for (let x = 0; x < schematrix.length; x++) {
     for (let y = 0; y < schematrix[0].length; y++) {
-
       // fill up numDataMap
-      if (/\d/.test((schematrix[x][y]))) {
+      if (/\d/.test(schematrix[x][y])) {
         const numData = getNumData(x, y, schematrix[x]);
         numDataMap.set(numData.indexKey, { ...numData });
         y += numData.digits.length - 1;
@@ -78,7 +87,7 @@ const getSolutionForPart2 = (source) => {
       }
 
       // fill up starMap
-      if (schematrix[x][y] === '*') {
+      if (schematrix[x][y] === "*") {
         starMap.set(`${x};${y}`, { x: x, y: y, partNumbers: [] });
       }
     }
@@ -102,7 +111,6 @@ const getSolutionForPart2 = (source) => {
   }
 
   return gearRatioSum;
-
 };
 
 /*
@@ -112,7 +120,7 @@ const getSolutionForPart2 = (source) => {
 */
 const getNumData = (x, y, line) => {
   let currentIndex = y;
-  let digits = '';
+  let digits = "";
   while (/\d/.test(line[currentIndex]) && currentIndex < line.length) {
     digits += line[currentIndex];
     currentIndex++;
@@ -124,7 +132,7 @@ const getNumData = (x, y, line) => {
     yHigh: currentIndex - 1,
     digits: digits,
   };
-}
+};
 
 /*
   Based on the number's length, and it's position within the line, this
@@ -134,16 +142,21 @@ const getNumData = (x, y, line) => {
 const getNumAdjacentMatrix = (fullMatrix, startIndexX, startIndexY, length) => {
   return fullMatrix
     .filter((line, lineIndex) => Math.abs(lineIndex - startIndexX) <= 1)
-    .map(line => line.filter((ch, chIndex) => (chIndex >= startIndexY - 1) && (chIndex <= startIndexY + length)))
-}
+    .map((line) =>
+      line.filter(
+        (ch, chIndex) =>
+          chIndex >= startIndexY - 1 && chIndex <= startIndexY + length,
+      ),
+    );
+};
 
 const doesMatrixContainSymbol = (matrix) => {
   return matrix
-    .map(line => !!line.filter(ch => isSymbol(ch)).length)
-    .reduce((acc, curr) => acc || curr, false)
-}
+    .map((line) => !!line.filter((ch) => isSymbol(ch)).length)
+    .reduce((acc, curr) => acc || curr, false);
+};
 
-const isSymbol = (char) => char !== '.' && !/\d/.test(char);
+const isSymbol = (char) => char !== "." && !/\d/.test(char);
 
 /*
 Checks if the position of '*' is at most 1 distance
@@ -155,4 +168,3 @@ const isInVicinity = (currentStar, currentNum) =>
   (Math.abs(currentStar.y - currentNum.yLow) <= 1 ||
     Math.abs(currentStar.y - currentNum.yHigh) <= 1 ||
     (currentNum.yLow <= currentStar.y && currentStar.y <= currentNum.yHigh));
-

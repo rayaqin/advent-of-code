@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,27 +18,30 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let origamiInputRaw = source.split('\n\n');
+  let origamiInputRaw = source.split("\n\n");
   let maxX = 0;
   let maxY = 0;
-  let markCoordinates = origamiInputRaw[0].split('\n').map((cc) => {
-    let x = parseInt(cc.split(',')[0]);
-    let y = parseInt(cc.split(',')[1]);
+  let markCoordinates = origamiInputRaw[0].split("\n").map((cc) => {
+    let x = parseInt(cc.split(",")[0]);
+    let y = parseInt(cc.split(",")[1]);
     if (y > maxY) maxY = y;
     if (x > maxX) maxX = x;
     return { x: x, y: y };
   });
-  let foldInstructions = origamiInputRaw[1].split('\n').map((instruction) => {
-    return { axis: instruction.indexOf('y') >= 0 ? 'y' : 'x', position: parseInt(instruction.split('=')[1]) };
+  let foldInstructions = origamiInputRaw[1].split("\n").map((instruction) => {
+    return {
+      axis: instruction.indexOf("y") >= 0 ? "y" : "x",
+      position: parseInt(instruction.split("=")[1]),
+    };
   });
 
   foldInstructions.forEach((fi) => {
@@ -44,7 +49,8 @@ const solution = (source) => {
 
     markCoordinates.forEach((c) => {
       let nc = flipCoordinateOnAxis(c, fi.axis, fi.position);
-      if (!doesArrayContainCoordinates(newCoordinates, nc)) newCoordinates.push(nc);
+      if (!doesArrayContainCoordinates(newCoordinates, nc))
+        newCoordinates.push(nc);
     });
 
     markCoordinates = JSON.parse(JSON.stringify(newCoordinates));
@@ -55,8 +61,8 @@ const solution = (source) => {
 
 const flipCoordinateOnAxis = (c, axis, position) => {
   return {
-    x: axis === 'x' && c.x > position ? position - (c.x - position) : c.x,
-    y: axis === 'y' && c.y > position ? position - (c.y - position) : c.y,
+    x: axis === "x" && c.x > position ? position - (c.x - position) : c.x,
+    y: axis === "y" && c.y > position ? position - (c.y - position) : c.y,
   };
 };
 
@@ -77,9 +83,9 @@ const getGridFromCoordinates = (coordinates) => {
     if (c.y > maxY) maxY = c.y;
   });
 
-  let grid = Array.from(Array(maxY + 1), () => new Array(maxX + 1).fill('.'));
+  let grid = Array.from(Array(maxY + 1), () => new Array(maxX + 1).fill("."));
   coordinates.forEach((c) => {
-    grid[c.y][c.x] = '#';
+    grid[c.y][c.x] = "#";
   });
 
   return grid;

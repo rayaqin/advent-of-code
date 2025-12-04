@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,7 +39,10 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
@@ -51,8 +57,15 @@ const getSolutionForPart1 = (source) => {
 
   source.split("\r\n").map((rucksack) => {
     const leftCharacterArray = rucksack.slice(0, rucksack.length / 2).split("");
-    const rightCharacterSet = new Set(rucksack.slice(rucksack.length / 2).split(""));
-    sumOfPriorities += priorities[leftCharacterArray.find((packageType) => rightCharacterSet.has(packageType))];
+    const rightCharacterSet = new Set(
+      rucksack.slice(rucksack.length / 2).split(""),
+    );
+    sumOfPriorities +=
+      priorities[
+        leftCharacterArray.find((packageType) =>
+          rightCharacterSet.has(packageType),
+        )
+      ];
   });
   return sumOfPriorities;
 };
@@ -60,11 +73,20 @@ const getSolutionForPart1 = (source) => {
 const getSolutionForPart2 = (source) => {
   let sumOfPriorities = 0;
 
-  const rucksacks = source.split("\r\n").map((rucksack) => new Set(rucksack.split("")));
+  const rucksacks = source
+    .split("\r\n")
+    .map((rucksack) => new Set(rucksack.split("")));
 
   for (let i = 0; i < rucksacks.length - 2; i += 3) {
     sumOfPriorities +=
-      priorities[[...getIntersection(rucksacks[i], getIntersection(rucksacks[i + 1], rucksacks[i + 2]))][0]];
+      priorities[
+        [
+          ...getIntersection(
+            rucksacks[i],
+            getIntersection(rucksacks[i + 1], rucksacks[i + 2]),
+          ),
+        ][0]
+      ];
   }
 
   return sumOfPriorities;

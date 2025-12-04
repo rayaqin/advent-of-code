@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,18 +39,23 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
-const getSolutionForPart1 = (source) => {
-
-};
+const getSolutionForPart1 = (source) => {};
 
 const getSolutionForPart2 = (source) => {
-  const SBPairs = source.split('\r\n').map(line => {
-    const sensorData = /x=(-?\d+), y=(-?\d+).*?x=(-?\d+), y=(-?\d+)/g.exec(line).map(Number);
-    const distance = Math.abs(sensorData[1] - sensorData[3]) + Math.abs(sensorData[2] - sensorData[4]);
+  const SBPairs = source.split("\r\n").map((line) => {
+    const sensorData = /x=(-?\d+), y=(-?\d+).*?x=(-?\d+), y=(-?\d+)/g
+      .exec(line)
+      .map(Number);
+    const distance =
+      Math.abs(sensorData[1] - sensorData[3]) +
+      Math.abs(sensorData[2] - sensorData[4]);
     const sensorX = sensorData[1];
     const sensorY = sensorData[2];
     return {
@@ -60,20 +68,25 @@ const getSolutionForPart2 = (source) => {
           B: { x: sensorX + distance + 1, y: sensorY },
           C: { x: sensorX, y: sensorY - distance - 1 },
           D: { x: sensorX - distance - 1, y: sensorY },
-        }
+        },
       },
       beacon: { x: sensorData[3], y: sensorData[4] },
       distance: distance,
-    }
-  })
+    };
+  });
 
   console.log(SBPairs[0].sensor, SBPairs[1].sensor);
-  console.log(getSensorPlusOneIntersections(SBPairs[0].sensor, SBPairs[1].sensor));
+  console.log(
+    getSensorPlusOneIntersections(SBPairs[0].sensor, SBPairs[1].sensor),
+  );
 
   let allIntersections = [];
   for (let i = 0; i < SBPairs.length; i++) {
     for (let j = i + 1; j < SBPairs.length; j++) {
-      const intersections = getSensorPlusOneIntersections(SBPairs[i].sensor, SBPairs[j].sensor);
+      const intersections = getSensorPlusOneIntersections(
+        SBPairs[i].sensor,
+        SBPairs[j].sensor,
+      );
       if (intersections.length) {
         allIntersections.push(intersections);
       }
@@ -81,22 +94,66 @@ const getSolutionForPart2 = (source) => {
   }
 
   return allIntersections;
-
-
 };
 
-const getSensorPlusOneIntersections = (sensor1, sensor2) => [
-  getIntersection(sensor1.points.A, sensor1.points.B, sensor2.points.D, sensor2.points.A),
-  getIntersection(sensor1.points.A, sensor1.points.B, sensor2.points.C, sensor2.points.B),
-  getIntersection(sensor1.points.D, sensor1.points.C, sensor2.points.D, sensor2.points.A),
-  getIntersection(sensor1.points.D, sensor1.points.C, sensor2.points.C, sensor2.points.B),
-  getIntersection(sensor1.points.D, sensor1.points.A, sensor2.points.A, sensor2.points.B),
-  getIntersection(sensor1.points.D, sensor1.points.A, sensor2.points.D, sensor2.points.C),
-  getIntersection(sensor1.points.C, sensor1.points.B, sensor2.points.D, sensor2.points.C),
-  getIntersection(sensor1.points.C, sensor1.points.B, sensor2.points.A, sensor2.points.B),
-].filter(a => a !== null);
+const getSensorPlusOneIntersections = (sensor1, sensor2) =>
+  [
+    getIntersection(
+      sensor1.points.A,
+      sensor1.points.B,
+      sensor2.points.D,
+      sensor2.points.A,
+    ),
+    getIntersection(
+      sensor1.points.A,
+      sensor1.points.B,
+      sensor2.points.C,
+      sensor2.points.B,
+    ),
+    getIntersection(
+      sensor1.points.D,
+      sensor1.points.C,
+      sensor2.points.D,
+      sensor2.points.A,
+    ),
+    getIntersection(
+      sensor1.points.D,
+      sensor1.points.C,
+      sensor2.points.C,
+      sensor2.points.B,
+    ),
+    getIntersection(
+      sensor1.points.D,
+      sensor1.points.A,
+      sensor2.points.A,
+      sensor2.points.B,
+    ),
+    getIntersection(
+      sensor1.points.D,
+      sensor1.points.A,
+      sensor2.points.D,
+      sensor2.points.C,
+    ),
+    getIntersection(
+      sensor1.points.C,
+      sensor1.points.B,
+      sensor2.points.D,
+      sensor2.points.C,
+    ),
+    getIntersection(
+      sensor1.points.C,
+      sensor1.points.B,
+      sensor2.points.A,
+      sensor2.points.B,
+    ),
+  ].filter((a) => a !== null);
 
-const getIntersection = (sensorDiamondVertex1, sensorDiamondVertex2, sensorDiamondVertex3, sensorDiamondVertex4) => {
+const getIntersection = (
+  sensorDiamondVertex1,
+  sensorDiamondVertex2,
+  sensorDiamondVertex3,
+  sensorDiamondVertex4,
+) => {
   let Ax = sensorDiamondVertex1.x;
   let Ay = sensorDiamondVertex1.y;
   let Bx = sensorDiamondVertex2.x;
@@ -135,7 +192,7 @@ const getIntersection = (sensorDiamondVertex1, sensorDiamondVertex2, sensorDiamo
     and slopes.
     slopeAB * x + yInterceptAB = slopeCD * x + yInterceptCD
   */
-  const intersectionX = (yInterceptCD - yInterceptAB) / (slopeAB - slopeCD)
+  const intersectionX = (yInterceptCD - yInterceptAB) / (slopeAB - slopeCD);
 
   /*
     Then we substitute this intersectX value to one of the y equations
@@ -147,14 +204,15 @@ const getIntersection = (sensorDiamondVertex1, sensorDiamondVertex2, sensorDiamo
   if (
     isPointOnLineSegment(intersectionX, intersectionY, Ax, Ay, Bx, By) &&
     isPointOnLineSegment(intersectionX, intersectionY, Cx, Cy, Dx, Dy) &&
-    intersectionX % 1 === 0 && intersectionY % 1 === 0
+    intersectionX % 1 === 0 &&
+    intersectionY % 1 === 0
   ) {
-    return { x: intersectionX, y: intersectionY }
+    return { x: intersectionX, y: intersectionY };
   }
 
   // The intersection is outside of the line segments or between relevant integer points
-  return null
-}
+  return null;
+};
 
 function isPointOnLineSegment(x, y, Ax, Ay, Bx, By) {
   /*
@@ -162,8 +220,9 @@ function isPointOnLineSegment(x, y, Ax, Ay, Bx, By) {
   We don't have to check collinearity since we already know that.
   */
   return (
-    (x >= Math.min(Ax, Bx) && x <= Math.max(Ax, Bx)) &&
-    (y >= Math.min(Ay, By) && y <= Math.max(Ay, By))
-  )
-
+    x >= Math.min(Ax, Bx) &&
+    x <= Math.max(Ax, Bx) &&
+    y >= Math.min(Ay, By) &&
+    y <= Math.max(Ay, By)
+  );
 }

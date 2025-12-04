@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,12 +18,12 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
@@ -32,15 +34,15 @@ const solution = (source) => {
 
   console.log({ data: source });
 
-  const instructions = source.split('\n').map((line) => {
-    let splitLine = line.split(' ');
+  const instructions = source.split("\n").map((line) => {
+    let splitLine = line.split(" ");
     let command = splitLine[0];
     let distance = parseInt(splitLine[1]);
 
-    if (command === 'forward') {
+    if (command === "forward") {
       horizontalPosition += distance;
       depth += aim * distance;
-    } else if (command === 'up') {
+    } else if (command === "up") {
       aim -= distance;
     } else {
       aim += distance;
@@ -53,19 +55,19 @@ const solution = (source) => {
   });
 
   canvas.innerHTML =
-    '<b>Commands with corresponding distance values: </b>' +
-    '<br />' +
+    "<b>Commands with corresponding distance values: </b>" +
+    "<br />" +
     instructions.map((i) => {
-      return '<br />' + i.command + '  ' + i.distance;
+      return "<br />" + i.command + "  " + i.distance;
     }) +
-    '<br />' +
-    '<br />' +
-    'horizontal position: ' +
+    "<br />" +
+    "<br />" +
+    "horizontal position: " +
     horizontalPosition +
-    '<br />' +
-    'depth: ' +
+    "<br />" +
+    "depth: " +
     depth +
-    '<br />' +
-    'horizontal position * depth: ' +
+    "<br />" +
+    "horizontal position * depth: " +
     horizontalPosition * depth;
 };

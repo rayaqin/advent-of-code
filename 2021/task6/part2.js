@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,21 +18,21 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
   let lanternfish = source
-    .split(',')
+    .split(",")
     .map((f) => parseInt(f))
     .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
   console.log(lanternfish);
-  canvas.innerHTML += '<br />' + 'start: ' + i + ': ' + lanternfish;
+  canvas.innerHTML += "<br />" + "start: " + i + ": " + lanternfish;
 
   for (let i = 0; i <= 8; i++) {
     if (!lanternfish.get(i)) lanternfish.set(i, 0);
@@ -45,7 +47,7 @@ const solution = (source) => {
     sum += fishCount;
   });
 
-  canvas.innerHTML += '<br />' + 'sum: ' + sum;
+  canvas.innerHTML += "<br />" + "sum: " + sum;
 };
 
 const executeBreedingCycle = (fishMap) => {

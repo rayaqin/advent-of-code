@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,20 +18,23 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let nodes = source
-    .split('\n')
-    .map((line) =>
-      line.split('').map((char) => ({ value: parseInt(char), visited: false, distance: Infinity, neighbours: [] }))
-    );
+  let nodes = source.split("\n").map((line) =>
+    line.split("").map((char) => ({
+      value: parseInt(char),
+      visited: false,
+      distance: Infinity,
+      neighbours: [],
+    })),
+  );
 
   let nodeMap = {};
   let unvisitedNodeKeys = new Set();
@@ -38,26 +43,34 @@ const solution = (source) => {
 
   for (let x = 0; x < nodes.length; x++) {
     for (let y = 0; y < nodes[x].length; y++) {
-      if (x + 1 < nodes.length) nodes[x][y].neighbours.push(x + 1 + ',' + y);
-      if (x - 1 >= 0) nodes[x][y].neighbours.push(x - 1 + ',' + y);
-      if (y + 1 < nodes[x].length) nodes[x][y].neighbours.push(x + ',' + (y + 1));
-      if (y - 1 >= 0) nodes[x][y].neighbours.push(x + ',' + (y - 1));
-      nodeMap[x + ',' + y] = nodes[x][y];
-      unvisitedNodeKeys.add(x + ',' + y);
+      if (x + 1 < nodes.length) nodes[x][y].neighbours.push(x + 1 + "," + y);
+      if (x - 1 >= 0) nodes[x][y].neighbours.push(x - 1 + "," + y);
+      if (y + 1 < nodes[x].length)
+        nodes[x][y].neighbours.push(x + "," + (y + 1));
+      if (y - 1 >= 0) nodes[x][y].neighbours.push(x + "," + (y - 1));
+      nodeMap[x + "," + y] = nodes[x][y];
+      unvisitedNodeKeys.add(x + "," + y);
       if (x == nodes.length - 1 && y == nodes[x].length - 1) {
-        destinationNodeKey = x + ',' + y;
+        destinationNodeKey = x + "," + y;
       }
     }
   }
 
   console.log(destinationNodeKey);
 
-  nodeMap['0,0'].distance = 0;
-  let currentNodeKey = returnSmallestDistanceNodeKey(unvisitedNodeKeys, nodeMap);
-  while (destinationNodeKey !== currentNodeKey && nodeMap[destinationNodeKey].visited === false) {
+  nodeMap["0,0"].distance = 0;
+  let currentNodeKey = returnSmallestDistanceNodeKey(
+    unvisitedNodeKeys,
+    nodeMap,
+  );
+  while (
+    destinationNodeKey !== currentNodeKey &&
+    nodeMap[destinationNodeKey].visited === false
+  ) {
     nodeMap[currentNodeKey].neighbours.forEach((neighbour) => {
       if (unvisitedNodeKeys.has(neighbour)) {
-        let currentDistance = currentNodeKey === '0,0' ? 0 : nodeMap[currentNodeKey].distance;
+        let currentDistance =
+          currentNodeKey === "0,0" ? 0 : nodeMap[currentNodeKey].distance;
         let purposedNewValue = currentDistance + nodeMap[neighbour].value;
         let oldValue = nodeMap[neighbour].distance;
         nodeMap[neighbour].distance = Math.min(oldValue, purposedNewValue);
@@ -74,7 +87,10 @@ const solution = (source) => {
 const returnSmallestDistanceNodeKey = (univisitedKeys, nodeMap) => {
   let smallestNodeKey = null;
   univisitedKeys.forEach((coordinate) => {
-    if (!nodeMap[smallestNodeKey] || nodeMap[smallestNodeKey].distance > nodeMap[coordinate].distance) {
+    if (
+      !nodeMap[smallestNodeKey] ||
+      nodeMap[smallestNodeKey].distance > nodeMap[coordinate].distance
+    ) {
       smallestNodeKey = coordinate;
     }
   });

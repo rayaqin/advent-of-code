@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,7 +39,10 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
@@ -47,8 +53,10 @@ const getSolutionForPart1 = (source) => {
 
   assignmentPairs.forEach((pair) => {
     if (
-      (pair.rangeOne.from <= pair.rangeTwo.from && pair.rangeOne.to >= pair.rangeTwo.to) ||
-      (pair.rangeTwo.from <= pair.rangeOne.from && pair.rangeTwo.to >= pair.rangeOne.to)
+      (pair.rangeOne.from <= pair.rangeTwo.from &&
+        pair.rangeOne.to >= pair.rangeTwo.to) ||
+      (pair.rangeTwo.from <= pair.rangeOne.from &&
+        pair.rangeTwo.to >= pair.rangeOne.to)
     ) {
       fullContainments++;
     }
@@ -63,7 +71,12 @@ const getSolutionForPart2 = (source) => {
   let partialContainments = 0;
 
   assignmentPairs.forEach((pair) => {
-    if (!(pair.rangeOne.from > pair.rangeTwo.to || pair.rangeOne.to < pair.rangeTwo.from)) {
+    if (
+      !(
+        pair.rangeOne.from > pair.rangeTwo.to ||
+        pair.rangeOne.to < pair.rangeTwo.from
+      )
+    ) {
       partialContainments++;
     }
   });

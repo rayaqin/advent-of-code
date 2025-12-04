@@ -2,7 +2,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
   alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
+    "The File APIs are not fully supported in this browser. The code won't work.",
   );
 }
 
@@ -58,11 +58,11 @@ const getSolutionForPart1 = (source) => {
       }
       return acc;
     },
-    { listA: [], listB: [] }
+    { listA: [], listB: [] },
   );
   const sumOfDifferences = sortedLists.listA.reduce(
     (acc, numA, index) => acc + Math.abs(numA - sortedLists.listB[index]),
-    0
+    0,
   );
   return sumOfDifferences;
 };
@@ -74,7 +74,7 @@ const getSolutionForPart2 = (source) => {
       acc.listB.push(Number(numB));
       return acc;
     },
-    { listA: [], listB: [] }
+    { listA: [], listB: [] },
   );
   const sumOfNumsTimesOccurrences = numLists.listA.reduce((acc, numA) => {
     return acc + numA * numLists.listB.filter((numB) => numB === numA).length;

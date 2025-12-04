@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,29 +18,29 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
   let openToCloseTagMap = {
-    '(': ')',
-    '[': ']',
-    '{': '}',
-    '<': '>',
+    "(": ")",
+    "[": "]",
+    "{": "}",
+    "<": ">",
   };
   let tagToValueMap = {
-    ')': 3,
-    ']': 57,
-    '}': 1197,
-    '>': 25137,
+    ")": 3,
+    "]": 57,
+    "}": 1197,
+    ">": 25137,
   };
-  let lineCharArrays = source.split('\n').map((line) => {
-    return line.trim().split('');
+  let lineCharArrays = source.split("\n").map((line) => {
+    return line.trim().split("");
   });
 
   let openingsStack = [];
@@ -50,7 +52,10 @@ const solution = (source) => {
         openingsStack.push(lineArray[i]);
         continue;
       }
-      if (lineArray[i] === openToCloseTagMap[openingsStack[openingsStack.length - 1]]) {
+      if (
+        lineArray[i] ===
+        openToCloseTagMap[openingsStack[openingsStack.length - 1]]
+      ) {
         openingsStack.pop();
       } else {
         charsCausingCorruption.push(lineArray[i]);
@@ -60,9 +65,15 @@ const solution = (source) => {
   });
 
   canvas.innerHTML +=
-    '<br />' + 'characters causing corruption: ' + '<br />' + charsCausingCorruption.toString().replaceAll(',', '');
-  ('<br />');
+    "<br />" +
+    "characters causing corruption: " +
+    "<br />" +
+    charsCausingCorruption.toString().replaceAll(",", "");
+  ("<br />");
 
   canvas.innerHTML +=
-    '<br />' + '<br />' + 'syntax points: ' + charsCausingCorruption.reduce((acc, curr) => acc + tagToValueMap[curr], 0);
+    "<br />" +
+    "<br />" +
+    "syntax points: " +
+    charsCausingCorruption.reduce((acc, curr) => acc + tagToValueMap[curr], 0);
 };

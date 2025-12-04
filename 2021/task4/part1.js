@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,18 +18,18 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
-  let bingoData = source.split('\n');
+  let bingoData = source.split("\n");
 
-  let numbersDrawn = bingoData[0].split(',').map((a) => parseInt(a));
+  let numbersDrawn = bingoData[0].split(",").map((a) => parseInt(a));
   let boardLines = bingoData.slice(2);
   let boardLength = getIntArrayFromBoardLine(boardLines[0]).length;
 
@@ -35,7 +37,8 @@ const solution = (source) => {
   let boards = boardLines.reduce((acc, current) => {
     let currentLine = getIntArrayFromBoardLine(current);
     let tempAcc = acc ?? [];
-    currentLine.length === boardLength && bingoMatrix.push(currentLine.map((a) => ({ number: a, marked: false })));
+    currentLine.length === boardLength &&
+      bingoMatrix.push(currentLine.map((a) => ({ number: a, marked: false })));
     if (bingoMatrix.length === boardLength) {
       tempAcc.push(bingoMatrix);
       bingoMatrix = [];
@@ -47,19 +50,24 @@ const solution = (source) => {
   let winnerBoardIndex = null;
   let lastNumberCalled = null;
   let i = 0;
-  while (winnerBoardIndex === null && lastNumberCalled !== numbersDrawn[numbersDrawn.length - 1]) {
+  while (
+    winnerBoardIndex === null &&
+    lastNumberCalled !== numbersDrawn[numbersDrawn.length - 1]
+  ) {
     lastNumberCalled = numbersDrawn[i];
     winnerBoardIndex = markNumberOnBoards(numbersDrawn[i], boards, boardLength);
     i++;
   }
 
-  canvas.innerHTML = 'result: ' + getWinnerMatrixValue(boards[winnerBoardIndex], lastNumberCalled);
+  canvas.innerHTML =
+    "result: " +
+    getWinnerMatrixValue(boards[winnerBoardIndex], lastNumberCalled);
 };
 
 const getIntArrayFromBoardLine = (line) => {
   return line
-    .split(' ')
-    .filter((a) => a !== ' ' && !!a)
+    .split(" ")
+    .filter((a) => a !== " " && !!a)
     .map((a) => parseInt(a.trim()));
 };
 
@@ -97,6 +105,11 @@ const getWinnerMatrixValue = (matrix, lastNumberCalled) => {
     });
   });
   canvas.innerHTML +=
-    '<br />' + 'sum of unmarked numbers: ' + unmarkedSum + '<br />' + 'last number drawn: ' + lastNumberCalled;
+    "<br />" +
+    "sum of unmarked numbers: " +
+    unmarkedSum +
+    "<br />" +
+    "last number drawn: " +
+    lastNumberCalled;
   return unmarkedSum * lastNumberCalled;
 };

@@ -2,7 +2,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
   alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
+    "The File APIs are not fully supported in this browser. The code won't work.",
   );
 }
 
@@ -132,7 +132,7 @@ const getSolutionForPart2 = (source) => {
           // console.log("sequenceStart: ", sequenceStart);
           const sequenceToCheck = productID.slice(
             sequenceStart,
-            sequenceStart + repeatingSequenceLength
+            sequenceStart + repeatingSequenceLength,
           );
           // console.log("sequenceToCheck: ", sequenceToCheck);
           if (sequenceToCheck !== baseSequence) {

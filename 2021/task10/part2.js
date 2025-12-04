@@ -1,13 +1,15 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
-  console.log('File APIs are supported in your browser, you may proceed.');
+  console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
-const chooseFile = document.getElementById('choose-file');
-const inputWrapper = document.getElementById('input-wrapper');
-const canvasWrapper = document.getElementById('canvas-wrapper');
-const canvas = document.getElementById('canvas');
+const chooseFile = document.getElementById("choose-file");
+const inputWrapper = document.getElementById("input-wrapper");
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvas = document.getElementById("canvas");
 
 const handleFileSelect = (event) => {
   const reader = new FileReader();
@@ -16,36 +18,36 @@ const handleFileSelect = (event) => {
 };
 
 const swapToCanvas = () => {
-  inputWrapper.style.display = 'none';
-  chooseFile.style.display = 'none';
-  canvasWrapper.style.display = 'block';
+  inputWrapper.style.display = "none";
+  chooseFile.style.display = "none";
+  canvasWrapper.style.display = "block";
 };
 
-chooseFile.addEventListener('change', handleFileSelect, false);
+chooseFile.addEventListener("change", handleFileSelect, false);
 
 const solution = (source) => {
   swapToCanvas();
 
   let openToCloseTagMap = {
-    '(': ')',
-    '[': ']',
-    '{': '}',
-    '<': '>',
+    "(": ")",
+    "[": "]",
+    "{": "}",
+    "<": ">",
   };
   let tagToValueMap = {
-    ')': 3,
-    ']': 57,
-    '}': 1197,
-    '>': 25137,
+    ")": 3,
+    "]": 57,
+    "}": 1197,
+    ">": 25137,
   };
   let tagToValueMap2 = {
-    ')': 1,
-    ']': 2,
-    '}': 3,
-    '>': 4,
+    ")": 1,
+    "]": 2,
+    "}": 3,
+    ">": 4,
   };
-  let lineCharArrays = source.split('\n').map((line) => {
-    return line.trim().split('');
+  let lineCharArrays = source.split("\n").map((line) => {
+    return line.trim().split("");
   });
 
   let openingsStack = [];
@@ -56,27 +58,39 @@ const solution = (source) => {
     for (let i = 0; i < lineArray.length; i++) {
       if (Object.keys(openToCloseTagMap).includes(lineArray[i])) {
         openingsStack.push(lineArray[i]);
-      } else if (lineArray[i] === openToCloseTagMap[openingsStack[openingsStack.length - 1]]) {
+      } else if (
+        lineArray[i] ===
+        openToCloseTagMap[openingsStack[openingsStack.length - 1]]
+      ) {
         openingsStack.pop();
       } else {
         break; // corrupted line
       }
       if (i === lineArray.length - 1 && openingsStack.length) {
-        arrayOfTagsNeededForCompletion.push(openingsStack.reverse().map((c) => openToCloseTagMap[c]));
+        arrayOfTagsNeededForCompletion.push(
+          openingsStack.reverse().map((c) => openToCloseTagMap[c]),
+        );
         break;
       }
     }
   });
 
   let completionPoints = arrayOfTagsNeededForCompletion
-    .map((tags) => tags.reduce((acc, curr) => acc * 5 + tagToValueMap2[curr], 0))
-    .sort((a, b) => a - b)[Math.floor((arrayOfTagsNeededForCompletion.length - 1) / 2)];
+    .map((tags) =>
+      tags.reduce((acc, curr) => acc * 5 + tagToValueMap2[curr], 0),
+    )
+    .sort((a, b) => a - b)[
+    Math.floor((arrayOfTagsNeededForCompletion.length - 1) / 2)
+  ];
 
   canvas.innerHTML +=
-    '<br />' +
-    'tags needed for completion: ' +
-    '<br />' +
-    arrayOfTagsNeededForCompletion.map((a) => '<br />' + a.toString().replaceAll(',', ''));
+    "<br />" +
+    "tags needed for completion: " +
+    "<br />" +
+    arrayOfTagsNeededForCompletion.map(
+      (a) => "<br />" + a.toString().replaceAll(",", ""),
+    );
 
-  canvas.innerHTML += '<br />' + '<br />' + 'completion points: ' + completionPoints;
+  canvas.innerHTML +=
+    "<br />" + "<br />" + "completion points: " + completionPoints;
 };

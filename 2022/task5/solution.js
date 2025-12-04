@@ -1,7 +1,9 @@
 if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
-  alert("The File APIs are not fully supported in this browser. The code won't work.");
+  alert(
+    "The File APIs are not fully supported in this browser. The code won't work.",
+  );
 }
 
 const chooseFile = document.getElementById("choose-file");
@@ -22,7 +24,8 @@ const handleFileSelect = (event) => {
 chooseFile.addEventListener("change", handleFileSelect, false);
 
 const writeMessageToUser = (message) => {
-  messageToUser.classList.contains("invisible") || messageToUser.classList.add("invisible");
+  messageToUser.classList.contains("invisible") ||
+    messageToUser.classList.add("invisible");
   messageToUser.innerHTML = message;
   setTimeout(() => {
     messageToUser.classList.remove("invisible");
@@ -36,7 +39,10 @@ const addPartSelectionButtons = () => {
 
 const solveSelectedPart = (partId) => {
   writeMessageToUser("check the console");
-  const solution = partId === 1 ? getSolutionForPart1(fileContent) : getSolutionForPart2(fileContent);
+  const solution =
+    partId === 1
+      ? getSolutionForPart1(fileContent)
+      : getSolutionForPart2(fileContent);
   console.log(`Solution for part ${partId}:`, solution);
 };
 
@@ -99,7 +105,10 @@ const performOperationOne = (operation, stacksMap) => {
   for (let i = 0; i < operation.amount; i++) {
     let from = stacksMap[operation.containingStack];
     let to = stacksMap[operation.destinationStack];
-    const currentCrate = stacksMap[operation.containingStack][stacksMap[operation.containingStack].length - 1];
+    const currentCrate =
+      stacksMap[operation.containingStack][
+        stacksMap[operation.containingStack].length - 1
+      ];
     from.pop();
     to.push(currentCrate);
   }
@@ -109,9 +118,9 @@ const performOperationTwo = (operation, stacksMap) => {
   const currentCrates = stacksMap[operation.containingStack].slice([
     stacksMap[operation.containingStack].length - operation.amount,
   ]);
-  stacksMap[operation.containingStack] = stacksMap[operation.containingStack].slice(0, [
-    stacksMap[operation.containingStack].length - operation.amount,
-  ]);
+  stacksMap[operation.containingStack] = stacksMap[
+    operation.containingStack
+  ].slice(0, [stacksMap[operation.containingStack].length - operation.amount]);
   for (let i = 0; i < currentCrates.length; i++) {
     stacksMap[operation.destinationStack].push(currentCrates[i]);
   }

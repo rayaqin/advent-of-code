@@ -48,11 +48,11 @@ body {
   max-height: 600px;
 }
 
-input[type='file'] {
+input[type="file"] {
   position: absolute;
   left: -9999px;
 }
-input[type='file'] {
+input[type="file"] {
   position: absolute;
   left: -9999px;
 }

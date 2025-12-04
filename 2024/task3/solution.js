@@ -2,7 +2,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
   console.log("File APIs are supported in your browser, you may proceed.");
 } else {
   alert(
-    "The File APIs are not fully supported in this browser. The code won't work."
+    "The File APIs are not fully supported in this browser. The code won't work.",
   );
 }
 
@@ -46,7 +46,6 @@ const solveSelectedPart = (partId) => {
   console.log(`Solution for part ${partId}:`, solution);
 };
 
-
 const getSolutionForPart1 = (source) => {
   const cleanedInstructions = source
     .match(/mul\(\d{1,3},\d{1,3}\)/gm)
@@ -55,34 +54,45 @@ const getSolutionForPart1 = (source) => {
       values: instruction.match(/\d{1,3}/gm).map(Number),
     }));
 
-  const sumOfExecutedInstructions = cleanedInstructions.reduce((sum, currentInstruction) => {
-    return sum + currentInstruction.values[0] * currentInstruction.values[1]
-  }, 0)
-  
-  return sumOfExecutedInstructions
-  };
-  
-  const getSolutionForPart2 = (source) => {
-    const cleanedInstructions = source
-      .match(/mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)/gm)
-      .map((instruction) => ({
-        task: instruction.split("(")[0],
-        values: instruction.match(/\d{1,3}/gm)?.map(Number),
-      }));
+  const sumOfExecutedInstructions = cleanedInstructions.reduce(
+    (sum, currentInstruction) => {
+      return sum + currentInstruction.values[0] * currentInstruction.values[1];
+    },
+    0,
+  );
 
-    let instructionsEnabled = true;
-  
-    const sumOfExecutedInstructions = cleanedInstructions.reduce((sum, currentInstruction) => {
-      if(currentInstruction.task === "do") {
+  return sumOfExecutedInstructions;
+};
+
+const getSolutionForPart2 = (source) => {
+  const cleanedInstructions = source
+    .match(/mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)/gm)
+    .map((instruction) => ({
+      task: instruction.split("(")[0],
+      values: instruction.match(/\d{1,3}/gm)?.map(Number),
+    }));
+
+  let instructionsEnabled = true;
+
+  const sumOfExecutedInstructions = cleanedInstructions.reduce(
+    (sum, currentInstruction) => {
+      if (currentInstruction.task === "do") {
         instructionsEnabled = true;
         return sum;
       }
-      if(currentInstruction.task === "don't") {
+      if (currentInstruction.task === "don't") {
         instructionsEnabled = false;
         return sum;
       }
-      return sum + Boolean(instructionsEnabled) * currentInstruction.values[0] * currentInstruction.values[1]
-    }, 0)
-  
-    return sumOfExecutedInstructions
+      return (
+        sum +
+        Boolean(instructionsEnabled) *
+          currentInstruction.values[0] *
+          currentInstruction.values[1]
+      );
+    },
+    0,
+  );
+
+  return sumOfExecutedInstructions;
 };
