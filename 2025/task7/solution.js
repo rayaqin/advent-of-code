@@ -72,15 +72,12 @@ const getSolutionForPart1 = (source) => {
   return resultObject.splitCount;
 };
 const getSolutionForPart2 = (source) => {
-  const tachyonGrid = source.split("\n").map((line) => line.split(""));
+  const tachyonGridRaw = source.split("\n").map((line) => line.split(""));
 
   const emptyChar = ".";
   const splitterChar = "^";
   const sourceChar = "S";
   const tachyonBeamChar = "|";
-
-  // const rootNodeRow = 0;
-  // const rootNodeCol = tachyonGrid[0].findIndex((c) => c === sourceChar);
 
   let resultObject = {
     tachyonGrid: [],
@@ -88,7 +85,7 @@ const getSolutionForPart2 = (source) => {
   };
 
   drawTachyonPaths(
-    tachyonGrid,
+    tachyonGridRaw,
     emptyChar,
     splitterChar,
     sourceChar,
@@ -96,29 +93,44 @@ const getSolutionForPart2 = (source) => {
     resultObject
   );
 
-  // const rootNode = {
-  //   gridRow: rootNodeRow,
-  //   gridCol: rootNodeCol,
-  //   setKey: `${rootNodeRow}-${rootNodeCol}`,
-  //   value: sourceChar,
-  //   children: [],
-  // };
+  const { tachyonGrid } = resultObject;
 
-  // const nodeMap = { [rootNode.setKey]: rootNode };
+  tachyonGrid[tachyonGrid.length - 1] = tachyonGrid[tachyonGrid.length - 1].map(
+    (c) => (c === tachyonBeamChar ? 1 : c)
+  );
 
-  // buildTree(
-  //   rootNode,
-  //   resultObject.tachyonGrid,
-  //   nodeMap,
-  //   tachyonBeamChar,
-  //   splitterChar
-  // );
+  for (let iRow = tachyonGrid.length - 1; iRow > 0; iRow--) {
+    for (let iCol = 0; iCol < tachyonGrid[0].length; iCol++) {
+      const currentItem = tachyonGrid[iRow][iCol];
+      const currentItemIsNumeric = !isNaN(currentItem);
 
-  // console.log("nodeMap: ", nodeMap);
-  // console.log("rootNode: ", rootNode);
+      const above = tachyonGrid[iRow - 1][iCol];
 
-  // debugger;
-  // return depthFirstSearchForTotalPathCount(rootNode);
+      if (currentItem === splitterChar) {
+        continue;
+      }
+
+      if (currentItemIsNumeric && above === tachyonBeamChar) {
+        tachyonGrid[iRow - 1][iCol] = currentItem;
+        continue;
+      }
+
+      if (iRow + 1 >= tachyonGrid.length) continue;
+
+      const bottomRight = tachyonGrid[iRow + 1][iCol + 1];
+      const bottomLeft = tachyonGrid[iRow + 1][iCol - 1];
+      const below = tachyonGrid[iRow + 1][iCol];
+
+      if (currentItem === tachyonBeamChar && below === splitterChar) {
+        const sum = bottomLeft + bottomRight;
+        tachyonGrid[iRow][iCol] = sum;
+
+        if (above === tachyonBeamChar) tachyonGrid[iRow - 1][iCol] = sum;
+      }
+    }
+  }
+
+  return tachyonGrid;
 };
 
 const drawTachyonPaths = (
@@ -130,13 +142,14 @@ const drawTachyonPaths = (
   resultObject
 ) => {
   const resultGrid = tachyonGrid.map((line) => [...line]);
-  for (let iRow = 1; iRow < resultGrid.length - 1; iRow++) {
+  for (let iRow = 1; iRow < resultGrid.length; iRow++) {
     for (let iCol = 0; iCol < resultGrid[0].length; iCol++) {
       const currentChar = resultGrid[iRow][iCol];
       if (currentChar !== emptyChar) continue;
 
       const charAbove = resultGrid[iRow - 1][iCol];
-      const charBelow = resultGrid[iRow + 1][iCol];
+      const charBelow =
+        iRow + 1 < resultGrid.length ? resultGrid[iRow + 1][iCol] : null;
       const charLeft = iCol - 1 <= 0 ? null : resultGrid[iRow][iCol - 1];
       const charRight = iCol + 1 <= 0 ? null : resultGrid[iRow][iCol + 1];
       const charTopLeft = iCol - 1 <= 0 ? null : resultGrid[iRow - 1][iCol - 1];
@@ -162,70 +175,4 @@ const drawTachyonPaths = (
     }
   }
   resultObject.tachyonGrid = resultGrid;
-};
-
-function depthFirstSearchForTotalPathCount(node) {
-  if (node.children.length === 0) {
-    return 1; // leaf
-  }
-  let totalPathCount = 0;
-  for (const child of node.children) {
-    totalPathCount += depthFirstSearchForTotalPathCount(child);
-  }
-  return totalPathCount;
-}
-
-const buildTree = (
-  currentNode,
-  tachyonGrid,
-  nodeMap,
-  tachyonBeamChar,
-  splitterChar
-) => {
-  let currIRow = currentNode.gridRow + 1;
-  if (currIRow >= tachyonGrid.length) return;
-
-  let charBelow = tachyonGrid[currIRow][currentNode.gridCol];
-  while (charBelow === tachyonBeamChar) {
-    currIRow++;
-    charBelow = tachyonGrid[currIRow][currentNode.gridCol];
-  }
-
-  if (charBelow === splitterChar) {
-    const leftRow = currIRow;
-    const leftCol = currentNode.gridCol - 1;
-    const leftSetKey = `${currIRow}-${leftCol}`;
-
-    const leftChild = nodeMap[leftSetKey] ?? {
-      gridRow: leftRow,
-      gridCol: leftCol,
-      setKey: leftSetKey,
-      value: tachyonBeamChar,
-      children: [],
-    };
-
-    buildTree(leftChild, tachyonGrid, nodeMap, tachyonBeamChar, splitterChar);
-    currentNode.children.push(leftChild);
-    nodeMap[leftSetKey] = leftChild;
-
-    const rightRow = currIRow;
-    const rightCol = currentNode.gridCol + 1;
-    const rightSetKey = `${currIRow}-${rightCol}`;
-
-    const rightChild = nodeMap[rightSetKey] ?? {
-      gridRow: rightRow,
-      gridCol: rightCol,
-      setKey: rightSetKey,
-      value: tachyonBeamChar,
-      children: [],
-    };
-
-    buildTree(rightChild, tachyonGrid, nodeMap, tachyonBeamChar, splitterChar);
-    currentNode.children.push(rightChild);
-    nodeMap[rightSetKey] = rightChild;
-
-    return;
-  }
-
-  return;
 };
