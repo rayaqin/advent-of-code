@@ -123,32 +123,6 @@ const getSolutionForPart2 = (source) => {
   return combinedRangeSize;
 };
 
-const getOverlapRangeOfTwoRanges = (rangeOne, rangeTwo) => {
-  if (rangeOne.to < rangeTwo.from || rangeOne.from > rangeTwo.to) {
-    return null;
-  }
-
-  if (rangeOne.to <= rangeTwo.to && rangeOne.from >= rangeTwo.from) {
-    return rangeOne;
-  }
-
-  if (rangeOne.to >= rangeTwo.to && rangeOne.from <= rangeTwo.from) {
-    return rangeTwo;
-  }
-
-  if (rangeOne.to >= rangeTwo.to) {
-    return {
-      from: rangeOne.from,
-      to: rangeTwo.to,
-    };
-  }
-
-  return {
-    from: rangeTwo.from,
-    to: rangeOne.to,
-  };
-};
-
 const doRangesOverlap = (rangeOne, rangeTwo) => {
   return rangeOne.to >= rangeTwo.from && rangeOne.from <= rangeTwo.to;
 };
